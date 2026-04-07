@@ -115,7 +115,7 @@ function SingleMolSim() {
         </GlassCard>
       </div>
       <p className="text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-        שים לב: בכל פגיעה בדופן האנכית, המולקולה מחזירה <M math="\Delta p = 2mv_x" /> לדופן. הדבר יוצר כוח.
+        שים לב: בכל פגיעה בדופן האנכית, המולקולה מחזירה <M tex="\Delta p = 2mv_x" /> לדופן. הדבר יוצר כוח.
       </p>
     </div>
   )
@@ -132,9 +132,9 @@ const STEPS: DerivationStep[] = [
         <p className="text-sm leading-relaxed">
           לחץ מאקרוסקופי נובע מהכוח שמולקולות מפעילות על הדפנות. כוח = שיעור שינוי תנע:
         </p>
-        <BlockMath math="F = \frac{\Delta p}{\Delta t}" />
-        <p className="text-sm">מולקולה עם מהירות <M math="v_x" /> ומסה <M math="m" /> נוגחת בדופן ומוחזרת:</p>
-        <BlockMath math="\Delta p = 2mv_x" />
+        <BlockMath tex="F = \frac{\Delta p}{\Delta t}" />
+        <p className="text-sm">מולקולה עם מהירות <M tex="v_x" /> ומסה <M tex="m" /> נוגחת בדופן ומוחזרת:</p>
+        <BlockMath tex="\Delta p = 2mv_x" />
       </div>
     ),
     interimQuestion: {
@@ -148,10 +148,10 @@ const STEPS: DerivationStep[] = [
     title: 'שלב 2 — תדירות ההתנגשויות',
     content: (
       <div className="space-y-3">
-        <p className="text-sm">בקופסה באורך <M math="L" />, המולקולה עוברת מסע הלוך ושוב:</p>
-        <BlockMath math="\Delta t = \frac{2L}{v_x}" />
+        <p className="text-sm">בקופסה באורך <M tex="L" />, המולקולה עוברת מסע הלוך ושוב:</p>
+        <BlockMath tex="\Delta t = \frac{2L}{v_x}" />
         <p className="text-sm">הכוח הממוצע שמפעילה מולקולה אחת:</p>
-        <BlockMath math="F_1 = \frac{\Delta p}{\Delta t} = \frac{2mv_x}{2L/v_x} = \frac{mv_x^2}{L}" />
+        <BlockMath tex="F_1 = \frac{\Delta p}{\Delta t} = \frac{2mv_x}{2L/v_x} = \frac{mv_x^2}{L}" />
       </div>
     ),
     interimQuestion: {
@@ -166,9 +166,9 @@ const STEPS: DerivationStep[] = [
     content: (
       <div className="space-y-3">
         <p className="text-sm">סכום הכוחות של כל N מולקולות, חלקי שטח הפנים A:</p>
-        <BlockMath math="P = \frac{F_{total}}{A} = \frac{m \sum v_{xi}^2}{LA}" />
-        <p className="text-sm">הנפח <M math="V = LA" />, וממוצע: <M math="\langle v_x^2 \rangle = \frac{1}{N}\sum v_{xi}^2" /></p>
-        <BlockMath math="\boxed{P = \frac{Nm\langle v_x^2 \rangle}{V}}" />
+        <BlockMath tex="P = \frac{F_{total}}{A} = \frac{m \sum v_{xi}^2}{LA}" />
+        <p className="text-sm">הנפח <M tex="V = LA" />, וממוצע: <M tex="\langle v_x^2 \rangle = \frac{1}{N}\sum v_{xi}^2" /></p>
+        <BlockMath tex="\boxed{P = \frac{Nm\langle v_x^2 \rangle}{V}}" />
       </div>
     ),
     interimQuestion: {
@@ -183,11 +183,11 @@ const STEPS: DerivationStep[] = [
     content: (
       <div className="space-y-3">
         <p className="text-sm">בטמפרטורה קבועה, אנרגיה קינטית ממוצעת קבועה, לכן:</p>
-        <BlockMath math="PV = Nm\langle v_x^2 \rangle = \text{const}" />
+        <BlockMath tex="PV = Nm\langle v_x^2 \rangle = \text{const}" />
         <p className="text-sm leading-relaxed" style={{ color: 'var(--success)' }}>
-          ✓ חוק בויל <M math="PV = \text{const}" /> יוצא ישירות מהמודל הקינטי!
+          ✓ חוק בויל <M tex="PV = \text{const}" /> יוצא ישירות מהמודל הקינטי!
         </p>
-        <BlockMath math="PV = NkT \quad \Leftrightarrow \quad m\langle v_x^2\rangle = kT" />
+        <BlockMath tex="PV = NkT \quad \Leftrightarrow \quad m\langle v_x^2\rangle = kT" />
       </div>
     ),
     interimQuestion: {
@@ -242,7 +242,10 @@ function ApplySection() {
         </div>
       </GlassCard>
       <TrapCard
-        trap={{ title: 'בלבול בין כוח ללחץ', wrong: 'F \\ \\text{גדל} \\Rightarrow P \\text{ גדל תמיד}', right: 'P = F/A \\text{ — חשוב גם שטח הפנים!}', explanation: 'לחץ הוא כוח ליחידת שטח. אם הכוח גדל אבל גם השטח גדל באותה מידה, הלחץ לא משתנה.' }}
+        title="בלבול בין כוח ללחץ"
+        wrongFormula="F \ \text{גדל} \Rightarrow P \text{ גדל תמיד}"
+        rightFormula="P = F/A \text{ — חשוב גם שטח הפנים!}"
+        description="לחץ הוא כוח ליחידת שטח. אם הכוח גדל אבל גם השטח גדל באותה מידה, הלחץ לא משתנה."
       />
     </div>
   )

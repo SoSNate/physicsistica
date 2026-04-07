@@ -171,9 +171,9 @@ const STEPS: DerivationStep[] = [
         <p className="text-sm leading-relaxed">
           בשיווי משקל תרמי, כל דרגת חופש (כל איבר ריבועי בהמילטוניאן) מקבלת בממוצע אנרגיה:
         </p>
-        <BlockMath math="\langle \varepsilon_i \rangle = \frac{1}{2}k_BT" />
+        <BlockMath tex="\langle \varepsilon_i \rangle = \frac{1}{2}k_BT" />
         <p className="text-sm">לגז מונואטומי עם 3 דרגות חופש תרגום:</p>
-        <BlockMath math="\langle \varepsilon \rangle = 3 \cdot \frac{1}{2}k_BT = \frac{3}{2}k_BT" />
+        <BlockMath tex="\langle \varepsilon \rangle = 3 \cdot \frac{1}{2}k_BT = \frac{3}{2}k_BT" />
       </div>
     ),
     interimQuestion: {
@@ -187,13 +187,13 @@ const STEPS: DerivationStep[] = [
     title: 'שלב 2 — קיבול חום במולה',
     content: (
       <div className="space-y-3">
-        <p className="text-sm">אנרגיה פנימית של מול גז: <M math="U = N_A \cdot f \cdot \frac{1}{2}k_BT = \frac{f}{2}RT" /></p>
+        <p className="text-sm">אנרגיה פנימית של מול גז: <M tex="U = N_A \cdot f \cdot \frac{1}{2}k_BT = \frac{f}{2}RT" /></p>
         <p className="text-sm">קיבול חום בנפח קבוע:</p>
-        <BlockMath math="C_V = \frac{\partial U}{\partial T}\bigg|_V = \frac{f}{2}R" />
+        <BlockMath tex="C_V = \frac{\partial U}{\partial T}\bigg|_V = \frac{f}{2}R" />
         <div className="rounded-lg p-2 text-xs space-y-1" style={{ background: 'var(--accent-soft)' }}>
-          <div>חד-אטומי (f=3): <M math="C_V = \frac{3}{2}R \approx 12.5" /> J/mol·K</div>
-          <div>דו-אטומי (f=5): <M math="C_V = \frac{5}{2}R \approx 20.8" /> J/mol·K</div>
-          <div>רב-אטומי (f=6): <M math="C_V = 3R \approx 24.9" /> J/mol·K</div>
+          <div>חד-אטומי (f=3): <M tex="C_V = \frac{3}{2}R \approx 12.5" /> J/mol·K</div>
+          <div>דו-אטומי (f=5): <M tex="C_V = \frac{5}{2}R \approx 20.8" /> J/mol·K</div>
+          <div>רב-אטומי (f=6): <M tex="C_V = 3R \approx 24.9" /> J/mol·K</div>
         </div>
       </div>
     ),
@@ -217,7 +217,6 @@ const cvTable = [
 ]
 
 function ApplySection() {
-  const [showTrap, setShowTrap] = useState(false)
   return (
     <div className="space-y-4">
       <GlassCard padding="md">
@@ -247,7 +246,10 @@ function ApplySection() {
         </p>
       </GlassCard>
       <TrapCard
-        trap={{ title: 'ויברציות תמיד פעילות?', wrong: 'f_{total} = 3+2+2 = 7 \\text{ לדו-אטומי בכל T}', right: 'f_{eff}(T) \\text{ — ויברציות פעילות רק מעל } T_{vib} \\approx 1000K', explanation: 'באנרגיה נמוכה, הויברציות "קפואות" — עקרון אי-הוודאות של מכניקת קוונטים. זו כשל הפיזיקה הקלאסית!' }}
+        title="ויברציות תמיד פעילות?"
+        wrongFormula="f_{total} = 3+2+2 = 7 \text{ לדו-אטומי בכל T}"
+        rightFormula="f_{eff}(T) \text{ — ויברציות פעילות רק מעל } T_{vib} \approx 1000K"
+        description={'באנרגיה נמוכה, הויברציות "קפואות" — עקרון אי-הוודאות של מכניקת קוונטים. זו כשל הפיזיקה הקלאסית!'}
       />
     </div>
   )

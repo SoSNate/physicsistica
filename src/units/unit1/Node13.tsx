@@ -117,10 +117,10 @@ const STEPS: DerivationStep[] = [
     title: 'שלב 1 — חיבור PV=NkT לאנרגיה קינטית',
     content: (
       <div className="space-y-3">
-        <p className="text-sm">מ-Node 1.2 ידענו: <M math="P = \frac{Nm\langle v^2 \rangle}{3V}" /></p>
-        <p className="text-sm">ומשוואת מצב גז אידיאלי: <M math="PV = NkT" /></p>
+        <p className="text-sm">מ-Node 1.2 ידענו: <M tex="P = \frac{Nm\langle v^2 \rangle}{3V}" /></p>
+        <p className="text-sm">ומשוואת מצב גז אידיאלי: <M tex="PV = NkT" /></p>
         <p className="text-sm">נשווה:</p>
-        <BlockMath math="\frac{Nm\langle v^2 \rangle}{3} = NkT" />
+        <BlockMath tex="\frac{Nm\langle v^2 \rangle}{3} = NkT" />
       </div>
     ),
     interimQuestion: {
@@ -134,10 +134,10 @@ const STEPS: DerivationStep[] = [
     title: 'שלב 2 — הגדרת אנרגיה קינטית ממוצעת',
     content: (
       <div className="space-y-3">
-        <p className="text-sm">אנרגיה קינטית של מולקולה: <M math="\varepsilon = \frac{1}{2}mv^2" /></p>
+        <p className="text-sm">אנרגיה קינטית של מולקולה: <M tex="\varepsilon = \frac{1}{2}mv^2" /></p>
         <p className="text-sm">לכן אנרגיה קינטית ממוצעת:</p>
-        <BlockMath math="\langle\varepsilon\rangle = \frac{1}{2}m\langle v^2\rangle" />
-        <p className="text-sm">נציב: <M math="\frac{1}{2}m\langle v^2\rangle = \frac{3}{2}kT" /></p>
+        <BlockMath tex="\langle\varepsilon\rangle = \frac{1}{2}m\langle v^2\rangle" />
+        <p className="text-sm">נציב: <M tex="\frac{1}{2}m\langle v^2\rangle = \frac{3}{2}kT" /></p>
       </div>
     ),
     interimQuestion: {
@@ -151,12 +151,12 @@ const STEPS: DerivationStep[] = [
     title: 'שלב 3 — מהירות RMS',
     content: (
       <div className="space-y-3">
-        <p className="text-sm">מ-⟨ε⟩ = (3/2)kT, נפתח עבור <M math="v_{rms}" />:</p>
-        <BlockMath math="v_{rms} = \sqrt{\langle v^2\rangle} = \sqrt{\frac{3kT}{m}}" />
+        <p className="text-sm">מ-⟨ε⟩ = (3/2)kT, נפתח עבור <M tex="v_{rms}" />:</p>
+        <BlockMath tex="v_{rms} = \sqrt{\langle v^2\rangle} = \sqrt{\frac{3kT}{m}}" />
         <p className="text-sm leading-relaxed">
-          עבור חנקן (N₂, <M math="m = 28\text{ u}" />) ב-T=300K:
+          עבור חנקן (N₂, <M tex="m = 28\text{ u}" />) ב-T=300K:
         </p>
-        <BlockMath math="v_{rms} \approx 517 \text{ m/s}" />
+        <BlockMath tex="v_{rms} \approx 517 \text{ m/s}" />
       </div>
     ),
     interimQuestion: {
@@ -175,15 +175,20 @@ function ApplySection() {
   return (
     <div className="space-y-4">
       <WhatIfExplorer
-        params={[{ name: 'T', label: 'טמפרטורה T (K)', min: 100, max: 1000, default: 300, unit: 'K', criticalPoints: [{ value: 0, label: 'T→0: v_rms→0' }] }]}
+        title="מהירות RMS לעומת טמפרטורה"
+        description="כיצד טמפרטורה משפיעה על v_rms?"
+        params={[{ key: 'T', label: 'טמפרטורה T (K)', symbol: 'T', unit: 'K', min: 100, max: 1000, step: 10, defaultValue: 300, criticalPoints: [{ value: 0, label: 'T→0: v_rms→0' }] }]}
         renderFormula={v => `v_{rms} = \\sqrt{\\frac{3k_BT}{m}} = ${Math.round(Math.sqrt(v.T / 300) * 517)} \\text{ m/s (N}_2\\text{)}`}
         questions={[
-          { text: 'מה קורה ל-v_rms כש-T → 0?', answer: 'v_rms → 0. מולקולות עצרות — אפס מוחלט. (בפועל — מכניקת קוונטים משנה את התמונה)' },
-          { text: 'האם "הגז מתחמם" ו"האנרגיה גדלה" הם אותו דבר?', answer: 'כן — T הוא מדד ישיר ל-⟨ε⟩ = (3/2)kT. לא ניתן להפריד ביניהם בגז אידיאלי.' },
+          { prompt: 'מה קורה ל-v_rms כש-T → 0?', answer: (_v) => 'v_rms → 0. מולקולות עצרות — אפס מוחלט. (בפועל — מכניקת קוונטים משנה את התמונה)' },
+          { prompt: 'האם "הגז מתחמם" ו"האנרגיה גדלה" הם אותו דבר?', answer: (_v) => 'כן — T הוא מדד ישיר ל-⟨ε⟩ = (3/2)kT. לא ניתן להפריד ביניהם בגז אידיאלי.' },
         ]}
       />
       <TrapCard
-        trap={{ title: 'בלבול בין ⟨v²⟩ ו-⟨v⟩²', wrong: 'v_{rms} = \\langle v \\rangle', right: 'v_{rms} = \\sqrt{\\langle v^2 \\rangle} \\neq \\langle v \\rangle', explanation: 'v_rms הוא שורש ממוצע ריבועי — שונה מהמהירות הממוצעת. יחסית: v_mp < v̄ < v_rms' }}
+        title="בלבול בין ⟨v²⟩ ו-⟨v⟩²"
+        wrongFormula="v_{rms} = \langle v \rangle"
+        rightFormula="v_{rms} = \sqrt{\langle v^2 \rangle} \neq \langle v \rangle"
+        description="v_rms הוא שורש ממוצע ריבועי — שונה מהמהירות הממוצעת. יחסית: v_mp < v̄ < v_rms"
       />
     </div>
   )
