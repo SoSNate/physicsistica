@@ -1,0 +1,195 @@
+import { useState, type ReactNode } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowRight, Eye, Wrench, Zap, CheckCircle, ChevronRight } from 'lucide-react'
+import type { PhaseId, NodeMeta, NodeType } from '../types'
+import { useNodeProgress } from '../hooks/useNodeProgress'
+
+interface NodeLayoutProps {
+  meta: NodeMeta
+  explore: ReactNode
+  build: ReactNode
+  apply: ReactNode
+  onBack: () => void
+}
+
+const PHASES: { id: PhaseId; label: string; sublabel: string; icon: typeof Eye; color: string }[] = [
+  { id: 'explore', label: 'חקור',  sublabel: 'הבן את הפנומנון', icon: Eye,     color: 'var(--teal)' },
+  { id: 'build',   label: 'בנה',   sublabel: 'גזור צעד אחרי צעד', icon: Wrench,  color: 'var(--accent)' },
+  { id: 'apply',   label: 'יישם',  sublabel: 'מה קורה אם...?',   icon: Zap,     color: 'var(--warn)' },
+]
+
+const TYPE_LABELS: Record<NodeType, string> = {
+  Concept:     'מושג',
+  Theorem:     'הוכחה',
+  Procedure:   'אלגוריתם',
+  Application: 'יישום',
+}
+
+const TYPE_COLORS: Record<NodeType, string> = {
+  Concept:     'var(--teal)',
+  Theorem:     'var(--accent)',
+  Procedure:   'var(--warn)',
+  Application: 'var(--success)',
+}
+
+export default function NodeLayout({ meta, explore, build, apply, onBack }: NodeLayoutProps) {
+  const { progress, setPhase } = useNodeProgress(meta.id)
+  const [active, setActive] = useState<PhaseId>(progress.currentPhase)
+
+  const phaseContent: Record<PhaseId, ReactNode> = { explore, build, apply }
+
+  const completedPhases: Record<PhaseId, boolean> = {
+    explore: progress.currentPhase !== 'explore',
+    build:   progress.currentPhase === 'apply' || progress.status === 'done',
+    apply:   progress.status === 'done',
+  }
+
+  function handlePhaseClick(id: PhaseId) {
+    // Can navigate to explore freely. Build requires explore done. Apply requires build done.
+    const phaseOrder: PhaseId[] = ['explore', 'build', 'apply']
+    const targetIdx = phaseOrder.indexOf(id)
+    const currentIdx = phaseOrder.indexOf(progress.currentPhase)
+    if (targetIdx <= currentIdx || completedPhases[id]) {
+      setActive(id)
+    } else if (targetIdx === currentIdx + 1) {
+      // Allow advancing
+      setActive(id)
+      setPhase(id)
+    }
+  }
+
+  return (
+    <div dir="rtl" className="min-h-screen" style={{ background: 'var(--bg)' }}>
+
+      {/* ── Header ─────────────────────────────────────────────────── */}
+      <header
+        className="sticky top-0 z-30 px-4 py-3 flex items-center gap-3"
+        style={{
+          background: 'var(--bg)',
+          borderBottom: '1px solid var(--border)',
+          backdropFilter: 'blur(12px)',
+        }}
+      >
+        <button
+          onClick={onBack}
+          className="flex items-center gap-1.5 text-sm font-medium rounded-xl px-3 py-1.5 transition-all active:scale-95"
+          style={{ color: 'var(--text-muted)', background: 'var(--accent-soft)' }}
+        >
+          <ArrowRight size={14} />
+          חזרה
+        </button>
+
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span
+              className="text-xs font-semibold px-2.5 py-0.5 rounded-full"
+              style={{ background: `color-mix(in srgb, ${TYPE_COLORS[meta.type]} 15%, transparent)`, color: TYPE_COLORS[meta.type] }}
+            >
+              {TYPE_LABELS[meta.type]}
+            </span>
+            {meta.isScaffolded && (
+              <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: 'var(--warn-soft)', color: 'var(--warn)' }}>
+                ⚙️ גזירה מורחבת
+              </span>
+            )}
+            <span className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+              Node {meta.id}
+            </span>
+          </div>
+          <h1 className="text-base font-bold leading-tight mt-0.5 truncate" style={{ color: 'var(--text)' }}>
+            {meta.title}
+          </h1>
+        </div>
+      </header>
+
+      {/* ── Phase tabs ─────────────────────────────────────────────── */}
+      <div className="px-4 pt-4 pb-2">
+        <div className="flex gap-2">
+          {PHASES.map((ph, idx) => {
+            const isActive    = active === ph.id
+            const isDone      = completedPhases[ph.id]
+            const phaseOrder  = ['explore', 'build', 'apply'] as PhaseId[]
+            const currentIdx  = phaseOrder.indexOf(progress.currentPhase)
+            const isLocked    = idx > currentIdx && !isDone
+
+            return (
+              <button
+                key={ph.id}
+                onClick={() => !isLocked && handlePhaseClick(ph.id)}
+                disabled={isLocked}
+                className="flex-1 rounded-xl py-2.5 px-3 text-right transition-all duration-200"
+                style={{
+                  background: isActive ? `color-mix(in srgb, ${ph.color} 14%, var(--card))` : 'var(--card)',
+                  border: `1.5px solid ${isActive ? ph.color : 'var(--border)'}`,
+                  opacity: isLocked ? 0.45 : 1,
+                  cursor: isLocked ? 'not-allowed' : 'pointer',
+                  boxShadow: isActive ? `0 0 0 3px color-mix(in srgb, ${ph.color} 18%, transparent)` : 'none',
+                }}
+              >
+                <div className="flex items-center justify-between">
+                  <ph.icon size={15} style={{ color: isActive ? ph.color : 'var(--text-muted)' }} />
+                  {isDone && <CheckCircle size={13} style={{ color: 'var(--success)' }} />}
+                </div>
+                <div className="mt-1 text-xs font-bold" style={{ color: isActive ? ph.color : 'var(--text)' }}>
+                  {ph.label}
+                </div>
+                <div className="text-[10px] leading-none mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                  {ph.sublabel}
+                </div>
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Progress bar */}
+        <div className="mt-3 h-1 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
+          <motion.div
+            className="h-full rounded-full"
+            style={{ background: 'var(--accent)' }}
+            animate={{
+              width: active === 'explore' ? '33%' : active === 'build' ? '66%' : '100%',
+            }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
+          />
+        </div>
+      </div>
+
+      {/* ── Phase content ───────────────────────────────────────────── */}
+      <main className="px-4 pb-8 pt-2">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.28 }}
+          >
+            {phaseContent[active]}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* ── Next phase button ─────────────────────────────────────── */}
+        {active !== 'apply' && (
+          <div className="mt-6 flex justify-start">
+            <button
+              onClick={() => {
+                const next: PhaseId = active === 'explore' ? 'build' : 'apply'
+                setActive(next)
+                setPhase(next)
+              }}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all active:scale-95"
+              style={{
+                background: 'var(--accent)',
+                color: '#fff',
+                boxShadow: '0 2px 12px color-mix(in srgb, var(--accent) 35%, transparent)',
+              }}
+            >
+              {active === 'explore' ? 'המשך לבנייה' : 'המשך ליישום'}
+              <ChevronRight size={15} style={{ transform: 'rotate(180deg)' }} />
+            </button>
+          </div>
+        )}
+      </main>
+    </div>
+  )
+}
