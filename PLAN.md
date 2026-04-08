@@ -32,7 +32,54 @@
 
 ---
 
-## 🚧 יעדים קרובים (Phase 2)
+## ✅ Phase 2 — הושלם
+
+### B — Practice Mode ✅
+- [x] SM-2 spaced repetition algorithm (interval × easiness factor)
+- [x] Streak counter + daily goal ring (5 שאלות/יום)
+- [x] XP system (10/5/2 XP לפי confidence × difficulty multiplier)
+- [x] Badge system (15 תגים: streak, mastery, perfect session, etc.)
+- [x] Badge toast animation
+- [x] Stats panel — per-unit progress bars + total XP
+- [x] Difficulty filter (★☆☆ / ★★☆ / ★★★)
+- [x] Session summary עם XP earned
+- [x] +17 extra questions → ~107 סה"כ
+
+### C — UX ✅
+- [x] Breadcrumb בתוך node (יחידה › שם node)
+- [x] Continue button — "המשך: [node אחרון]" בHome
+- [x] Exam mode button בHome
+- [x] Confetti animation בכניסה ל-Apply phase
+- [x] Loading skeleton (במקום spinner גנרי)
+- [x] "הושלם" badge בheader של node
+
+### D — Exam Mode ✅
+- [x] 90-min countdown timer עם warning באדום
+- [x] 20 שאלות קשות מכל היחידות
+- [x] Self-assessment (ידעתי/לא ידעתי) per question
+- [x] Score ring animation
+- [x] Per-unit breakdown בתוצאות
+
+### G — Infrastructure ✅
+- [x] PWA manifest.json
+- [x] Service Worker (offline cache)
+- [x] Vite manualChunks (vendor-react/motion/katex/lucide)
+- [x] meta description + theme-color בindex.html
+
+---
+
+## 🚧 יעדים פתוחים
+
+### E — גמיפיקציה (חלקי — XP+Badges done, נותר:)
+- [ ] Leaderboard (LocalStorage based, אנונימי)
+- [ ] Level system (XP → level 1-10 עם title)
+- [ ] Profile screen — סיכום XP + badges + streak
+
+### F — נגישות (נותר:)
+- [ ] `lang="he"` על html element
+- [ ] `aria-label` על אייקונים ב-KnowledgeGraph
+- [ ] Skip-to-content link
+- [ ] Focus styles visible בkeyboard nav
 
 ### A — QA ושיפור איכות תוכן
 - [ ] **בדיקת כל 28 נודים** — בדיקה ידנית: האם הסימולטור עובד, האם המתמטיקה נכונה
