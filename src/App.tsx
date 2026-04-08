@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react'
+import React, { useState, useEffect, lazy, Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { BookOpen, BarChart2, Map, ChevronLeft } from 'lucide-react'
 import ThemeToggle from './components/ThemeToggle'
@@ -7,8 +7,30 @@ import KnowledgeGraph from './components/KnowledgeGraph'
 import { UNITS, ALL_NODES } from './data/units'
 import { loadAllProgress } from './hooks/useNodeProgress'
 
-// Lazy-load nodes (will add as we build them)
+// ── Lazy-load all nodes ────────────────────────────────────────────
+// Unit 1
+const Node11 = lazy(() => import('./units/unit1/Node11'))
 const Node12 = lazy(() => import('./units/unit1/Node12'))
+const Node13 = lazy(() => import('./units/unit1/Node13'))
+const Node14 = lazy(() => import('./units/unit1/Node14'))
+const Node15 = lazy(() => import('./units/unit1/Node15'))
+const Node16 = lazy(() => import('./units/unit1/Node16'))
+// Unit 2
+const Node21 = lazy(() => import('./units/unit2/Node21'))
+const Node22 = lazy(() => import('./units/unit2/Node22'))
+const Node23 = lazy(() => import('./units/unit2/Node23'))
+const Node24 = lazy(() => import('./units/unit2/Node24'))
+const Node25 = lazy(() => import('./units/unit2/Node25'))
+// Unit 3
+const Node31 = lazy(() => import('./units/unit3/Node31'))
+const Node32 = lazy(() => import('./units/unit3/Node32'))
+const Node33 = lazy(() => import('./units/unit3/Node33'))
+const Node34 = lazy(() => import('./units/unit3/Node34'))
+const Node35 = lazy(() => import('./units/unit3/Node35'))
+const Node36 = lazy(() => import('./units/unit3/Node36'))
+// Unit 4
+const Node41 = lazy(() => import('./units/unit4/Node41'))
+const Node42 = lazy(() => import('./units/unit4/Node42'))
 
 type Screen = 'home' | 'unit' | 'node' | 'graph'
 
@@ -270,8 +292,13 @@ export default function App() {
 
 // ── Helpers ──────────────────────────────────────────────────────────
 function resolveNode(nodeId: string) {
-  if (nodeId === '1.2') return Node12
-  return null
+  const map: Record<string, React.LazyExoticComponent<React.ComponentType<{ onBack: () => void }>>> = {
+    '1.1': Node11, '1.2': Node12, '1.3': Node13, '1.4': Node14, '1.5': Node15, '1.6': Node16,
+    '2.1': Node21, '2.2': Node22, '2.3': Node23, '2.4': Node24, '2.5': Node25,
+    '3.1': Node31, '3.2': Node32, '3.3': Node33, '3.4': Node34, '3.5': Node35, '3.6': Node36,
+    '4.1': Node41, '4.2': Node42,
+  }
+  return map[nodeId] ?? null
 }
 
 function LoadingScreen() {
