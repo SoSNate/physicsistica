@@ -69,7 +69,7 @@ export const UNITS: UnitMeta[] = [
     nodes: [
       { id: '5.1', unitId: 5, title: 'הצבר הגרנד-קנוני',                   subtitle: 'חילוף אנרגיה וחלקיקים — פוטנציאל כימי μ',  type: 'Concept',     isScaffolded: false, prereqs: ['4.1'], color: 'from-rose-500/20 to-pink-500/10' },
       { id: '5.2', unitId: 5, title: 'סטטיסטיקת פרמי-דיראק',              subtitle: 'עקרון האיסור של פאולי → פונקציית אכלוס',   type: 'Theorem',     isScaffolded: true,  prereqs: ['5.1'], color: 'from-blue-500/20 to-indigo-500/10' },
-      { id: '5.3', unitId: 5, title: 'סטטיסטיקת בוז-איינשטיין',           subtitle: 'בוזונים — ריבוי אכלוס מותר',              type: 'Theorem',     isScaffolded: true,  prereqs: ['5.1'], color: 'from-violet-500/20 to-purple-500/10' },
+      { id: '5.3', unitId: 5, title: 'סטטיסטיקת בוז-איינשטיין',           subtitle: 'בוזונים — ריבוי אכלוס מותר',              type: 'Theorem',     isScaffolded: true,  prereqs: ['5.1', '5.2'], color: 'from-violet-500/20 to-purple-500/10' },
       { id: '5.4', unitId: 5, title: 'גז אלקטרונים מנוון',                subtitle: 'אנרגיית פרמי, לחץ ב-T=0 (ננסים לבנים)',    type: 'Application', isScaffolded: false, prereqs: ['5.2'], color: 'from-indigo-500/20 to-blue-500/10' },
       { id: '5.5', unitId: 5, title: 'עיבוי בוז-איינשטיין',               subtitle: 'מעבר פאזה קוונטי בטמפרטורות נמוכות',       type: 'Application', isScaffolded: false, prereqs: ['5.3'], color: 'from-purple-500/20 to-fuchsia-500/10' },
     ],

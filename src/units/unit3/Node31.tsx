@@ -180,6 +180,56 @@ const STEPS: DerivationStep[] = [
   },
 ]
 
+// ══════════════════════════════════════════════════════════════════════
+// APPLY
+// ══════════════════════════════════════════════════════════════════════
+function ApplySection() {
+  const [revealed, setRevealed] = useState<boolean[]>([false, false, false])
+  const toggle = (i: number) => setRevealed(prev => prev.map((v, j) => j === i ? !v : v))
+
+  const QUESTIONS = [
+    {
+      q: '1 mol גז חד-אטומי (Cv=3R/2) ב-T₀=300K, V=10L. מוסיפים Q=200J בתהליך איזו-כורי. מה ΔT?',
+      hint: 'V=const → W=0 → dU=Q. ו-dU=nCvΔT',
+      a: 'ΔT = Q/(nCv) = 200/(1×12.47) ≈ 16K. T_f ≈ 316K',
+    },
+    {
+      q: 'אותו גז מתפשט אדיאבטית עד V_f=2V. מה T_f? (γ=5/3)',
+      hint: 'TV^(γ-1)=const לתהליך אדיאבטי. γ-1=2/3',
+      a: 'T_f = T_i·(V_i/V_f)^(γ-1) = 300·(1/2)^(2/3) ≈ 300·0.63 ≈ 189K. הגז מתקרר!',
+    },
+    {
+      q: 'מחממים 1 mol גז (Cv=3R/2) ב-ΔT=100K: פעם בכלי נוקשה (V=const), פעם בבוכנה חופשית (P=const). איפה צריך יותר חום?',
+      hint: 'Cp = Cv + R. בתהליך P=const הגז גם מתפשט ועושה עבודה',
+      a: 'V=const: Q=nCvΔT = 1×12.47×100 = 1247J. P=const: Q=nCpΔT = 1×20.8×100 = 2080J. בבוכנה צריך ~67% יותר חום כי חלקו הולך לעבודת התפשטות (W=PΔV=RΔT≈830J)',
+    },
+  ]
+
+  return (
+    <div className="space-y-3">
+      {QUESTIONS.map((item, i) => (
+        <div key={i} className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)' }}>
+          <div className="p-3" style={{ background: 'var(--accent-soft)' }}>
+            <p className="text-sm font-medium" style={{ color: 'var(--text)' }}>{item.q}</p>
+            <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>💡 {item.hint}</p>
+          </div>
+          {revealed[i] ? (
+            <div className="p-3 text-xs" style={{ background: 'var(--success-soft)', color: 'var(--success)', borderTop: '1px solid var(--border)' }}>
+              {item.a}
+            </div>
+          ) : (
+            <button onClick={() => toggle(i)}
+              className="w-full py-2 text-xs font-semibold transition-all hover:opacity-80"
+              style={{ color: 'var(--accent)' }}>
+              ▸ גלה תשובה
+            </button>
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function Node31({ onBack }: { onBack: () => void }) {
   return (
     <NodeLayout meta={meta} onBack={onBack}
@@ -188,12 +238,8 @@ export default function Node31({ onBack }: { onBack: () => void }) {
       apply={
         <div className="space-y-3">
           <GlassCard padding="md">
-            <h3 className="font-semibold text-sm mb-2" style={{ color: 'var(--text)' }}>מה קורה בכל תהליך?</h3>
-            <div className="space-y-2 text-xs" style={{ color: 'var(--text-muted)' }}>
-              <p>• <strong style={{ color: 'var(--text)' }}>מנוע קיטור:</strong> Q_H נכנס, W יוצא, Q_C מופלט. יעילות = W/Q_H</p>
-              <p>• <strong style={{ color: 'var(--text)' }}>מקרר:</strong> W על המערכת, Q_C נספג, Q_H מופלט.</p>
-              <p>• שימושי: bU ← Q עדיף לחימום של תנאי ביתי, בו V קבוע.</p>
-            </div>
+            <h3 className="font-semibold text-sm mb-3" style={{ color: 'var(--text)' }}>תרגול — חישובים עם החוק הראשון</h3>
+            <ApplySection />
           </GlassCard>
           <TrapCard
             title="Q ו-W הם פונקציות מסלול!"

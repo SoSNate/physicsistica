@@ -157,12 +157,14 @@ const STEPS: DerivationStep[] = [
     title: 'שלב 2 — קיפאון קוונטי של סיבובים',
     content: (
       <div className="space-y-3">
-        <p className="text-sm">רמות הסיבוב: <M tex="\varepsilon_l = \hbar^2 l(l+1)/2I, \; l=0,1,2,\ldots" /></p>
+        <p className="text-sm">רמות הסיבוב: <M tex="\varepsilon_l = \hbar^2 l(l+1)/2I" /></p>
         <p className="text-sm">טמפרטורה אופיינית: <M tex="\Theta_R = \hbar^2/2Ik_B" /></p>
-        <div className="rounded-lg p-2 text-xs space-y-1" style={{ background: 'var(--accent-soft)' }}>
-          <div>H₂: Θ_R ≈ 85K — קיפאון בחדר!</div>
-          <div>N₂: Θ_R ≈ 2.9K — פעיל בחדר</div>
-          <div>ω₀(H₂) גדול כי I קטן (אטומים קלים)</div>
+        <p className="text-sm">הכלל: DOF <strong>פעיל</strong> כאשר <M tex="k_BT \gg \varepsilon_1 = \hbar^2/I" />, כלומר <M tex="T \gg \Theta_R" /></p>
+        <div className="rounded-lg p-2 text-xs space-y-1.5" style={{ background: 'var(--accent-soft)' }}>
+          <div className="font-semibold" style={{ color: 'var(--text)' }}>דוגמה מספרית ב-T=300K:</div>
+          <div>• <strong>N₂:</strong> Θ_R=2.9K → k_BT ≈ 26 meV ≫ ε₁ → סיבוב פעיל ✓</div>
+          <div>• <strong>H₂:</strong> Θ_R=85K → k_BT ≈ 26 meV {'>'} ε₁=7.3 meV → פעיל בקושי ✓</div>
+          <div>• <strong>H₂ ב-50K:</strong> k_BT ≈ 4.3 meV &lt; ε₁=7.3 meV → קפוא ❄</div>
         </div>
       </div>
     ),
@@ -175,6 +177,56 @@ const STEPS: DerivationStep[] = [
   },
 ]
 
+// ══════════════════════════════════════════════════════════════════════
+// APPLY
+// ══════════════════════════════════════════════════════════════════════
+function ApplySection() {
+  const [revealed, setRevealed] = useState<boolean[]>([false, false, false])
+  const toggle = (i: number) => setRevealed(prev => prev.map((v, j) => j === i ? !v : v))
+
+  const QUESTIONS = [
+    {
+      q: 'מה Cv/R של H₂ ב-T=50K? אילו DOF פעילים?',
+      hint: 'Θ_R(H₂)=85K, Θ_V=6300K — האם T > Θ_R?',
+      a: 'T=50K < Θ_R=85K → סיבוב קפוא. רק תרגום פעיל (3 DOF). Cv/R = 3/2 ≈ 12.5 J/(mol·K)',
+    },
+    {
+      q: 'השווה Cv/R של H₂ ו-N₂ ב-T=300K. האם הם שווים?',
+      hint: 'Θ_R(N₂)=2.9K, Θ_R(H₂)=85K — בדוק לכל אחד אם T > Θ_R',
+      a: 'N₂: Θ_R=2.9K ≪ 300K → סיבוב פעיל → Cv/R=5/2. H₂: Θ_R=85K < 300K → סיבוב פעיל גם → Cv/R=5/2. שניהם שווים ב-300K! ההבדל ניכר רק בטמפרטורות נמוכות (50–85K)',
+    },
+    {
+      q: 'גז N₂ מחומם מ-300K ל-4000K. בכמה גדל Cv/R?',
+      hint: 'Θ_V(N₂)=3350K — האם יש DOF חדש שמתעורר?',
+      a: 'ב-300K: Cv/R=5/2 (תרגום+סיבוב). ב-4000K > Θ_V=3350K → ויברציה מתעוררת (+1). Cv/R → 7/2. גידול של R ≈ 8.3 J/(mol·K)',
+    },
+  ]
+
+  return (
+    <div className="space-y-3">
+      {QUESTIONS.map((item, i) => (
+        <div key={i} className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)' }}>
+          <div className="p-3" style={{ background: 'var(--accent-soft)' }}>
+            <p className="text-sm font-medium" style={{ color: 'var(--text)' }}>{item.q}</p>
+            <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>💡 {item.hint}</p>
+          </div>
+          {revealed[i] ? (
+            <div className="p-3 text-xs" style={{ background: 'var(--success-soft)', color: 'var(--success)', borderTop: '1px solid var(--border)' }}>
+              {item.a}
+            </div>
+          ) : (
+            <button onClick={() => toggle(i)}
+              className="w-full py-2 text-xs font-semibold transition-all hover:opacity-80"
+              style={{ color: 'var(--accent)' }}>
+              ▸ גלה תשובה
+            </button>
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function Node44({ onBack }: { onBack: () => void }) {
   return (
     <NodeLayout meta={meta} onBack={onBack}
@@ -183,21 +235,8 @@ export default function Node44({ onBack }: { onBack: () => void }) {
       apply={
         <div className="space-y-3">
           <GlassCard padding="md">
-            <h3 className="font-semibold text-sm mb-2" style={{ color: 'var(--text)' }}>Θ_R ו-Θ_V לגזים שונים</h3>
-            <div className="space-y-1.5 text-xs">
-              {[
-                { gas: 'H₂', tr: 85, tv: 6300, comment: 'קיפאון סיבוב בחדר!' },
-                { gas: 'N₂', tr: 2.9, tv: 3350, comment: 'רוטציה פעילה, ויבר. קפואה' },
-                { gas: 'O₂', tr: 2.1, tv: 2260, comment: 'דומה לN₂' },
-                { gas: 'Cl₂', tr: 0.35, tv: 810, comment: 'שניהם כמעט פעילים בחדר' },
-              ].map(r => (
-                <div key={r.gas} className="flex items-center gap-2 rounded-lg p-1.5" style={{ background: 'var(--accent-soft)' }}>
-                  <span className="font-bold w-8" style={{ color: 'var(--accent)' }}>{r.gas}</span>
-                  <span style={{ color: 'var(--text-muted)' }}>Θ_R={r.tr}K, Θ_V={r.tv}K</span>
-                  <span className="mr-auto text-[10px]" style={{ color: 'var(--warn)' }}>{r.comment}</span>
-                </div>
-              ))}
-            </div>
+            <h3 className="font-semibold text-sm mb-3" style={{ color: 'var(--text)' }}>שאלות תחזית — DOF בטמפרטורות שונות</h3>
+            <ApplySection />
           </GlassCard>
           <TrapCard
             title="Cv = (f/2)R בכל T?"
