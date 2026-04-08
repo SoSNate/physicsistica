@@ -160,7 +160,7 @@ const STEPS: DerivationStep[] = [
         <div className="space-y-1 text-xs rounded-lg p-2" style={{ background: 'var(--accent-soft)' }}>
           <div>🏔️ <strong>גובה רב:</strong> P נמוך → T_boil נמוך → אוכל לא מבושל כהלכה</div>
           <div>🏥 <strong>אוטוקלב:</strong> P גבוה → T_boil {'>'} 121°C → סטריליזציה</div>
-          <div>❄️ <strong>קרח תחת לחץ:</strong> מים: dP/dT<0 → לחץ מוריד T_melt → גלישה על קרח</div>
+          <div>❄️ <strong>קרח תחת לחץ:</strong> מים: dP/dT{'<'}0 → לחץ מוריד T_melt → גלישה על קרח</div>
         </div>
       </div>
     ),

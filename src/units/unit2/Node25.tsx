@@ -176,7 +176,7 @@ const STEPS: DerivationStep[] = [
     content: (
       <div className="space-y-3">
         <p className="text-sm">נדרש <strong>היפוך אוכלוסין</strong>: לשים יותר ספינים ברמה הגבוהה.</p>
-        <p className="text-sm">בניסוי NMR: פולס RF מהפך מגנוטיזציה → מצב T<0 רגעי.</p>
+        <p className="text-sm">בניסוי NMR: פולס RF מהפך מגנוטיזציה → מצב T{'<'}0 רגעי.</p>
         <p className="text-sm">בלייזר: משאבה אופטית (optical pumping) יוצרת היפוך → הגברת אור!</p>
         <BlockMath tex="\text{לייזר}: \frac{N_2}{N_1} > 1 \Rightarrow T = \frac{\varepsilon}{k_B\ln(N_1/N_2)} < 0" />
       </div>
@@ -184,8 +184,7 @@ const STEPS: DerivationStep[] = [
     interimQuestion: {
       prompt: 'מדוע לייזר אי-אפשרי בשיווי-משקל T>0?',
       hint: 'בשיווי-משקל T>0: N_1 > N_2 תמיד (בולצמן)',
-      validate: s => s.includes('בולצמן') || s.includes('שיווי') || s.includes('רוב') || s.includes('מטה'),
-      validate: s => true, // accept any reasonable answer
+      validate: s => s.includes('בולצמן') || s.includes('שיווי') || s.includes('רוב') || s.includes('מטה') || true,
       correctAnswer: 'כי בולצמן: N_2/N_1 = e^(-ΔE/kT) < 1 — תמיד יותר ב-N_1',
     },
   },

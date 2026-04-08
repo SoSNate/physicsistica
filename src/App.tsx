@@ -31,6 +31,16 @@ const Node36 = lazy(() => import('./units/unit3/Node36'))
 // Unit 4
 const Node41 = lazy(() => import('./units/unit4/Node41'))
 const Node42 = lazy(() => import('./units/unit4/Node42'))
+const Node43 = lazy(() => import('./units/unit4/Node43'))
+const Node44 = lazy(() => import('./units/unit4/Node44'))
+const Node45 = lazy(() => import('./units/unit4/Node45'))
+const Node46 = lazy(() => import('./units/unit4/Node46'))
+// Unit 5
+const Node51 = lazy(() => import('./units/unit5/Node51'))
+const Node52 = lazy(() => import('./units/unit5/Node52'))
+const Node53 = lazy(() => import('./units/unit5/Node53'))
+const Node54 = lazy(() => import('./units/unit5/Node54'))
+const Node55 = lazy(() => import('./units/unit5/Node55'))
 
 type Screen = 'home' | 'unit' | 'node' | 'graph'
 
@@ -296,7 +306,8 @@ function resolveNode(nodeId: string) {
     '1.1': Node11, '1.2': Node12, '1.3': Node13, '1.4': Node14, '1.5': Node15, '1.6': Node16,
     '2.1': Node21, '2.2': Node22, '2.3': Node23, '2.4': Node24, '2.5': Node25,
     '3.1': Node31, '3.2': Node32, '3.3': Node33, '3.4': Node34, '3.5': Node35, '3.6': Node36,
-    '4.1': Node41, '4.2': Node42,
+    '4.1': Node41, '4.2': Node42, '4.3': Node43, '4.4': Node44, '4.5': Node45, '4.6': Node46,
+    '5.1': Node51, '5.2': Node52, '5.3': Node53, '5.4': Node54, '5.5': Node55,
   }
   return map[nodeId] ?? null
 }
