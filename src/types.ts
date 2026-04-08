@@ -81,9 +81,42 @@ export interface PracticeQuestion {
 }
 
 export interface PracticeRecord {
-  lastSeen:   string
-  confidence: PracticeConfidence
-  timesShown: number
+  lastSeen:    string
+  confidence:  PracticeConfidence
+  timesShown:  number
+  // SM-2 fields
+  interval:    number   // days until next review
+  easiness:    number   // EF factor, starts at 2.5
+  repetitions: number   // consecutive correct
+}
+
+/* ─── Daily goal ─────────────────────────────────────────────────── */
+export interface DailyStats {
+  date:     string   // 'YYYY-MM-DD'
+  answered: number
+  knew:     number
+  streak:   number   // consecutive days with goal met
+}
+
+/* ─── XP + Badges ────────────────────────────────────────────────── */
+export interface XPRecord {
+  total:     number
+  byUnit:    Record<number, number>
+  lastEarned: string  // ISO timestamp
+}
+
+export type BadgeId =
+  | 'first_session'
+  | 'streak_3' | 'streak_7' | 'streak_30'
+  | 'perfect_session'
+  | 'unit1_master' | 'unit2_master' | 'unit3_master' | 'unit4_master' | 'unit5_master'
+  | 'all_nodes'
+  | 'century'        // 100 questions answered
+  | 'kinetic_king' | 'entropy_expert' | 'thermo_titan' | 'canon_champion' | 'quantum_queen'
+
+export interface BadgeRecord {
+  id:        BadgeId
+  earnedAt:  string  // ISO
 }
 
 export interface UnitMeta {

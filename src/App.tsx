@@ -1,10 +1,11 @@
 import React, { useState, useEffect, lazy, Suspense, Component } from 'react'
 import { motion } from 'framer-motion'
-import { BookOpen, BarChart2, Map, ChevronLeft, Target } from 'lucide-react'
+import { BookOpen, BarChart2, Map, ChevronLeft, Target, Play, GraduationCap } from 'lucide-react'
 import ThemeToggle from './components/ThemeToggle'
 import GlassCard from './components/GlassCard'
 import KnowledgeGraph from './components/KnowledgeGraph'
 import PracticeMode from './components/PracticeMode'
+import ExamMode from './components/ExamMode'
 import { UNITS, ALL_NODES } from './data/units'
 import { loadAllProgress } from './hooks/useNodeProgress'
 
@@ -43,7 +44,7 @@ const Node53 = lazy(() => import('./units/unit5/Node53'))
 const Node54 = lazy(() => import('./units/unit5/Node54'))
 const Node55 = lazy(() => import('./units/unit5/Node55'))
 
-type Screen = 'home' | 'unit' | 'node' | 'graph' | 'practice'
+type Screen = 'home' | 'unit' | 'node' | 'graph' | 'practice' | 'exam'
 
 const UNIT_COLORS = [
   '#0D9488', '#7C3AED', '#EA580C', '#0369A1', '#BE185D',
@@ -100,6 +101,11 @@ export default function App() {
   // ── Practice mode ─────────────────────────────────────────────────
   if (screen === 'practice') {
     return <PracticeMode onBack={goHome} />
+  }
+
+  // ── Exam mode ──────────────────────────────────────────────────────
+  if (screen === 'exam') {
+    return <ExamMode onBack={goHome} />
   }
 
   // ── Knowledge graph ────────────────────────────────────────────────
@@ -213,6 +219,10 @@ export default function App() {
   const totalDone = Object.values(allProgress).filter(p => p.status === 'done').length
   const totalNodes = ALL_NODES.length
 
+  // Find last in-progress node for "continue" button
+  const lastInProgress = ALL_NODES.find(n => allProgress[n.id]?.status === 'in_progress')
+    ?? ALL_NODES.find(n => !allProgress[n.id] || allProgress[n.id]?.status === 'available')
+
   return (
     <div dir="rtl" className="min-h-screen p-4 pb-8" style={{ background: 'var(--bg)' }}>
       {/* Top bar */}
@@ -236,6 +246,30 @@ export default function App() {
           </button>
           <ThemeToggle />
         </div>
+      </div>
+
+      {/* Continue + action buttons */}
+      <div className="flex gap-2 mb-4">
+        {lastInProgress && (
+          <button onClick={() => openNode(lastInProgress.id)}
+            className="flex-1 flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95"
+            style={{ background: 'var(--accent)', color: '#fff' }}>
+            <Play size={13} fill="currentColor" />
+            המשך: {lastInProgress.title}
+          </button>
+        )}
+        <button onClick={() => setScreen('practice')}
+          className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all active:scale-95"
+          style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}>
+          <Target size={13} />
+          תרגול
+        </button>
+        <button onClick={() => setScreen('exam')}
+          className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all active:scale-95"
+          style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}>
+          <GraduationCap size={13} />
+          בחינה
+        </button>
       </div>
 
       {/* Overall progress bar */}
@@ -324,8 +358,27 @@ function resolveNode(nodeId: string) {
 
 function LoadingScreen() {
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
-      <div className="text-sm anim-pulse" style={{ color: 'var(--text-muted)' }}>טוען...</div>
+    <div dir="rtl" className="min-h-screen p-4" style={{ background: 'var(--bg)' }}>
+      {/* Skeleton header */}
+      <div className="flex items-center gap-3 mb-6 animate-pulse">
+        <div className="w-16 h-8 rounded-xl" style={{ background: 'var(--accent-soft)' }} />
+        <div className="flex-1 space-y-1.5">
+          <div className="h-2.5 rounded-full w-24" style={{ background: 'var(--border)' }} />
+          <div className="h-4 rounded-full w-40" style={{ background: 'var(--border)' }} />
+        </div>
+      </div>
+      {/* Skeleton phase tabs */}
+      <div className="flex gap-2 mb-4 animate-pulse">
+        {[1,2,3].map(i => (
+          <div key={i} className="flex-1 h-20 rounded-xl" style={{ background: 'var(--card)' }} />
+        ))}
+      </div>
+      {/* Skeleton content */}
+      <div className="space-y-3 animate-pulse">
+        {[1,2,3].map(i => (
+          <div key={i} className="h-24 rounded-2xl" style={{ background: 'var(--card)' }} />
+        ))}
+      </div>
     </div>
   )
 }

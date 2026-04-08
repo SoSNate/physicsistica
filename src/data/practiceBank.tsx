@@ -491,6 +491,164 @@ const unit5: PracticeQuestion[] = [
 ]
 
 // ════════════════════════════════════════════════════════════════════
+// שאלות חישוב נוספות — כל היחידות (בחינה ממוקדת)
+// ════════════════════════════════════════════════════════════════════
+const extra: PracticeQuestion[] = [
+  // ── יחידה 1 ──
+  q('1.x1','1.3',1,'numeric',2,
+    <p>טמפרטורה T=600K. חשב את <M tex="\bar{v}" /> של O₂ (M=32 g/mol).</p>,
+    <div className="space-y-1 text-sm">
+      <p><M tex="\bar{v}=\sqrt{8RT/\pi M}=\sqrt{8\times8.314\times600/(\pi\times0.032)}\approx 561\text{ m/s}" /></p>
+    </div>,
+    ['kinetic','speed','numeric']),
+
+  q('1.x2','1.6',1,'numeric',2,
+    <p>N₂ ב-T=300K, P=1atm. אורך מסלול חופשי ממוצע. (σ≈3.7Å)</p>,
+    <div className="space-y-1 text-sm">
+      <p><M tex="\lambda=\frac{k_BT}{\sqrt{2}\pi\sigma^2 P}\approx\frac{1.38\times10^{-23}\times300}{\sqrt{2}\pi(3.7\times10^{-10})^2\times10^5}\approx 68\text{ nm}" /></p>
+    </div>,
+    ['mean-free-path','numeric']),
+
+  q('1.x3','1.4',1,'conceptual',1,
+    <p>כמה דרגות חופש יש לגז חד-אטומי? לדו-אטומי ליניארי?</p>,
+    <div className="text-sm space-y-1">
+      <p>חד-אטומי: <M tex="f=3" /> (תנועה בלבד)</p>
+      <p>דו-אטומי ליניארי: <M tex="f=5" /> (3 תנועה + 2 סיבוב)</p>
+    </div>,
+    ['DOF','equipartition']),
+
+  // ── יחידה 2 ──
+  q('2.x1','2.1',2,'numeric',2,
+    <p>N=4 ספינים. כמה מיקרו-מצבים ל-N↑=2? מה האנטרופיה?</p>,
+    <div className="text-sm space-y-1">
+      <p><M tex="\Omega=\binom{4}{2}=6" /></p>
+      <p><M tex="S=k_B\ln 6\approx 1.79\,k_B" /></p>
+    </div>,
+    ['microstate','entropy','numeric']),
+
+  q('2.x2','2.3',2,'conceptual',2,
+    <p>מה הגדרת הטמפרטורה דרך האנטרופיה?</p>,
+    <div className="text-sm">
+      <BlockMath tex="\frac{1}{T}=\left(\frac{\partial S}{\partial E}\right)_N" />
+      <p className="text-xs opacity-70">שיפוע S(E) = הופכי של T</p>
+    </div>,
+    ['temperature','entropy','definition']),
+
+  q('2.x3','2.5',2,'conceptual',3,
+    <p>מתי T שלילי אפשרי? האם הוא "קר" יותר מT=+∞?</p>,
+    <div className="text-sm space-y-1">
+      <p>T{'<'}0 אפשרי רק כאשר יש <strong>ספקטרום אנרגיה חסום מלמעלה</strong> (ספינים, לייזר).</p>
+      <p>T={'<'}0 הוא <em>חם יותר</em> מ-T=+∞ — סדר: 0⁺→+∞→−∞→0⁻</p>
+    </div>,
+    ['negative-T','entropy']),
+
+  // ── יחידה 3 ──
+  q('3.x1','3.1',3,'numeric',1,
+    <p>תהליך איזוכורי: חממת 1 mol He מ-300K ל-500K. מה ΔU?</p>,
+    <div className="text-sm">
+      <p><M tex="\Delta U = nC_V\Delta T = 1\times\frac{3}{2}R\times200\approx 2494\text{ J}" /></p>
+      <p className="text-xs opacity-70">He חד-אטומי: C_V=(3/2)R</p>
+    </div>,
+    ['first-law','numeric','internal-energy']),
+
+  q('3.x2','3.2',3,'numeric',2,
+    <p>מנוע קרנו: T_H=600K, T_C=300K. מה היעילות המקסימלית?</p>,
+    <div className="text-sm">
+      <p><M tex="\eta=1-\frac{T_C}{T_H}=1-\frac{300}{600}=50\%" /></p>
+    </div>,
+    ['carnot','efficiency','numeric']),
+
+  q('3.x3','3.5',3,'conceptual',2,
+    <p>מה קורה לנקודת הרתיחה של מים בפסגת הר גבוה? למה?</p>,
+    <div className="text-sm">
+      <p>P נמוך → T_boil נמוך (פחות מ-100°C). לפי Clausius-Clapeyron: dP/dT {'>'} 0, כלומר P נמוך ↔ T רתיחה נמוך.</p>
+    </div>,
+    ['clausius-clapeyron','phase-transition']),
+
+  q('3.x4','3.3',3,'conceptual',3,
+    <p>מה ההבדל בין F (אנרגיה חופשית של הלמהולץ) ל-G (גיבס)?</p>,
+    <div className="text-sm space-y-1">
+      <p>F = U - TS: מינימלי בשיווי-משקל בT,V קבועים</p>
+      <p>G = H - TS: מינימלי בשיווי-משקל בT,P קבועים</p>
+      <p className="text-xs opacity-70">ניסויים ב-P קבוע → G רלוונטי יותר</p>
+    </div>,
+    ['free-energy','helmholtz','gibbs']),
+
+  // ── יחידה 4 ──
+  q('4.x1','4.1',4,'numeric',2,
+    <p>מערכת 3-רמות (ε=0,1,2 eV) ב-kT=0.5 eV. מה ⟨E⟩?</p>,
+    <div className="text-sm space-y-1">
+      <p><M tex="Z=1+e^{-2}+e^{-4}\approx 1+0.135+0.018=1.153" /></p>
+      <p><M tex="\langle E\rangle=\frac{0+1\cdot e^{-2}+2\cdot e^{-4}}{Z}\approx\frac{0.171}{1.153}\approx 0.148\text{ eV}" /></p>
+    </div>,
+    ['partition-function','average-energy','numeric']),
+
+  q('4.x2','4.2',4,'conceptual',2,
+    <p>מה הקשר בין F לZ (פונקציית חלוקה)?</p>,
+    <div className="text-sm">
+      <BlockMath tex="F = -k_BT\ln Z" />
+      <p className="text-xs opacity-70">ממנה נגזרים כל שאר הפוטנציאלים</p>
+    </div>,
+    ['free-energy','partition-function']),
+
+  q('4.x3','4.6',4,'numeric',2,
+    <p>מה תדר השיא (Wien) לT=5778K (שמש)? (b=2.898×10⁻³ m·K)</p>,
+    <div className="text-sm">
+      <p><M tex="\lambda_{max}=\frac{b}{T}=\frac{2.898\times10^{-3}}{5778}\approx 501\text{ nm}" /></p>
+      <p className="text-xs opacity-70">ירוק-צהוב — שיא הרגישות של העין!</p>
+    </div>,
+    ['planck','wien','numeric']),
+
+  q('4.x4','4.4',4,'conceptual',2,
+    <p>מדוע C_V של H₂ ב-T=50K קטן בהרבה מב-T=300K?</p>,
+    <div className="text-sm">
+      <p>ב-50K: kT ≪ ε_rot → רמות הסיבוב <strong>קפואות</strong> (לא מופעלות). רק 3 דרגות תנועה → C_V=(3/2)R.</p>
+      <p>ב-300K: kT ≈ ε_rot → סיבוב מופעל → C_V=(5/2)R.</p>
+    </div>,
+    ['heat-capacity','quantum-freezing','diatomic']),
+
+  // ── יחידה 5 ──
+  q('5.x1','5.2',5,'numeric',2,
+    <p>אלקטרונים ב-T=0. E_F=7eV. מה f_FD(6.5eV)?</p>,
+    <div className="text-sm">
+      <p>ב-T=0: f_FD(ε) = 1 אם ε {'<'} E_F, 0 אחרת.</p>
+      <p>6.5 {'<'} 7 → <M tex="f_{FD}(6.5)=1" /></p>
+    </div>,
+    ['fermi-dirac','T=0','numeric']),
+
+  q('5.x2','5.4',5,'numeric',2,
+    <p>Cu: n=8.5×10²⁸ m⁻³. אמוד E_F (m_e=9.1×10⁻³¹ kg).</p>,
+    <div className="text-sm space-y-1">
+      <p><M tex="E_F=\frac{\hbar^2}{2m}(3\pi^2 n)^{2/3}" /></p>
+      <p>חישוב מספרי → <M tex="E_F\approx 7\text{ eV}" /></p>
+    </div>,
+    ['fermi-energy','numeric','metal']),
+
+  q('5.x3','5.3',5,'conceptual',2,
+    <p>מדוע לייזר הוא פנומן BE ולא FD?</p>,
+    <div className="text-sm">
+      <p>פוטונים הם בוזונים (ספין 1). BE מאפשר ⟨n⟩ גדול לאין-שיעור במצב יחיד — זו <strong>לכידות לייזר</strong>. פרמיונים לא יכולים לצבור.</p>
+    </div>,
+    ['bosons','laser','statistics']),
+
+  q('5.x4','5.5',5,'conceptual',3,
+    <p>מה T_c של BEC תלויה בצפיפות n? (N₀/N=0 בT=T_c)</p>,
+    <div className="text-sm">
+      <BlockMath tex="k_BT_c\propto\frac{\hbar^2}{m}n^{2/3}" />
+      <p>n גדולה יותר → T_c גבוה יותר. לגזים אטומיים קפואים (n נמוכה מאוד) → T_c~nK.</p>
+    </div>,
+    ['BEC','critical-temperature','density']),
+
+  q('5.x5','5.1',5,'conceptual',2,
+    <p>מה המשמעות הפיזיקלית של הפוטנציאל הכימי μ?</p>,
+    <div className="text-sm">
+      <p><M tex="\mu=\left(\frac{\partial F}{\partial N}\right)_{T,V}" /> — אנרגיה הנדרשת להוספת חלקיק בודד למערכת.</p>
+      <p className="text-xs opacity-70">שיווי-משקל: μ_1 = μ_2 (כמו T לחום, P לנפח)</p>
+    </div>,
+    ['chemical-potential','grand-canonical']),
+]
+
+// ════════════════════════════════════════════════════════════════════
 // מאגר מלא
 // ════════════════════════════════════════════════════════════════════
 export const PRACTICE_BANK: PracticeQuestion[] = [
@@ -499,4 +657,5 @@ export const PRACTICE_BANK: PracticeQuestion[] = [
   ...unit3,
   ...unit4,
   ...unit5,
+  ...extra,
 ]

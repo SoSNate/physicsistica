@@ -5,4 +5,17 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   base: '/physicsistica/',
+  build: {
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react':  ['react', 'react-dom'],
+          'vendor-motion': ['framer-motion'],
+          'vendor-katex':  ['katex'],
+          'vendor-lucide': ['lucide-react'],
+        },
+      },
+    },
+  },
 })
