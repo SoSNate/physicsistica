@@ -9,11 +9,11 @@ export default defineConfig({
     chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-react':  ['react', 'react-dom'],
-          'vendor-motion': ['framer-motion'],
-          'vendor-katex':  ['katex'],
-          'vendor-lucide': ['lucide-react'],
+        manualChunks(id) {
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) return 'vendor-react'
+          if (id.includes('node_modules/framer-motion')) return 'vendor-motion'
+          if (id.includes('node_modules/katex')) return 'vendor-katex'
+          if (id.includes('node_modules/lucide-react')) return 'vendor-lucide'
         },
       },
     },
