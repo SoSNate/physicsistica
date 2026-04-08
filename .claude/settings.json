@@ -5,7 +5,8 @@
       "Bash(grep -n \"MathProps\\\\|interface Math\\\\|type Math\\\\|export.*Math\" src/components/*.tsx)",
       "Bash(grep -n \"TrapCardProps\\\\|interface Trap\\\\|type Trap\\\\|export.*TrapCard\\\\|WhatIfParam\" src/components/*.tsx)",
       "Bash(sed -n '1,25p' src/components/TrapCard.tsx)",
-      "Bash(sed -n '1,30p' src/components/WhatIfExplorer.tsx)"
+      "Bash(sed -n '1,30p' src/components/WhatIfExplorer.tsx)",
+      "Bash(npx gh-pages:*)"
     ]
   }
 }
