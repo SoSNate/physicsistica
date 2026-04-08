@@ -70,10 +70,21 @@ export function useNodeProgress(nodeId: string) {
     update({ scaffoldStep: progress.scaffoldStep + 1 })
   }, [progress.scaffoldStep, update])
 
-  return { progress, setPhase, markDone, advanceScaffold, update }
+  const reset = useCallback(() => {
+    const fresh = defaultProgress(nodeId)
+    localStorage.removeItem(storageKey(nodeId))
+    setProgress(fresh)
+  }, [nodeId])
+
+  return { progress, setPhase, markDone, advanceScaffold, update, reset }
 }
 
 /* Load all nodes for a unit (to compute KnowledgeGraph status) */
 export function loadAllProgress(nodeIds: string[]): Record<string, NodeProgress> {
   return Object.fromEntries(nodeIds.map(id => [id, load(id)]))
+}
+
+/* Reset progress for all nodes */
+export function resetAllProgress(nodeIds: string[]) {
+  nodeIds.forEach(id => localStorage.removeItem(storageKey(id)))
 }

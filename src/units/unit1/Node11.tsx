@@ -53,7 +53,7 @@ function SingleMolSim() {
       if (s.flash > 0) s.flash--
 
       // Background
-      ctx.fillStyle = '#1a2035'
+      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--card').trim() || '#1a2035'
       ctx.fillRect(0, 0, W, H)
 
       // Walls

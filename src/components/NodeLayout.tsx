@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Eye, Wrench, Zap, CheckCircle, ChevronRight } from 'lucide-react'
+import { ArrowRight, Eye, Wrench, Zap, CheckCircle, ChevronRight, RotateCcw } from 'lucide-react'
 import type { PhaseId, NodeMeta, NodeType } from '../types'
 import { useNodeProgress } from '../hooks/useNodeProgress'
 
@@ -33,20 +33,21 @@ const TYPE_COLORS: Record<NodeType, string> = {
 }
 
 export default function NodeLayout({ meta, explore, build, apply, onBack }: NodeLayoutProps) {
-  const { progress, setPhase } = useNodeProgress(meta.id)
+  const { progress, setPhase, reset } = useNodeProgress(meta.id)
   const [active, setActive] = useState<PhaseId>(progress.currentPhase)
 
   const phaseContent: Record<PhaseId, ReactNode> = { explore, build, apply }
 
+  const phaseOrder: PhaseId[] = ['explore', 'build', 'apply']
+  const currentIdx = phaseOrder.indexOf(progress.currentPhase)
   const completedPhases: Record<PhaseId, boolean> = {
-    explore: progress.currentPhase !== 'explore',
-    build:   progress.currentPhase === 'apply' || progress.status === 'done',
+    explore: currentIdx > 0 || progress.status === 'done',
+    build:   currentIdx > 1 || progress.status === 'done',
     apply:   progress.status === 'done',
   }
 
   function handlePhaseClick(id: PhaseId) {
     // Can navigate to explore freely. Build requires explore done. Apply requires build done.
-    const phaseOrder: PhaseId[] = ['explore', 'build', 'apply']
     const targetIdx = phaseOrder.indexOf(id)
     const currentIdx = phaseOrder.indexOf(progress.currentPhase)
     if (targetIdx <= currentIdx || completedPhases[id]) {
@@ -92,14 +93,25 @@ export default function NodeLayout({ meta, explore, build, apply, onBack }: Node
                 ⚙️ גזירה מורחבת
               </span>
             )}
-            <span className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
-              Node {meta.id}
+            <span className="text-xs font-medium flex items-center gap-1" style={{ color: 'var(--text-muted)' }}>
+              יחידה {meta.unitId}
+              <ChevronRight size={10} />
+              צומת {meta.id}
             </span>
           </div>
           <h1 className="text-base font-bold leading-tight mt-0.5 truncate" style={{ color: 'var(--text)' }}>
             {meta.title}
           </h1>
         </div>
+
+        <button
+          onClick={() => { if (confirm('לאפס את ההתקדמות בצומת זה?')) { reset(); setActive('explore') } }}
+          title="איפוס התקדמות"
+          className="flex items-center justify-center w-8 h-8 rounded-xl transition-all active:scale-95 hover:opacity-80"
+          style={{ color: 'var(--text-muted)', background: 'var(--accent-soft)' }}
+        >
+          <RotateCcw size={14} />
+        </button>
       </header>
 
       {/* ── Phase tabs ─────────────────────────────────────────────── */}

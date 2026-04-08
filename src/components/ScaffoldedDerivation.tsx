@@ -210,12 +210,12 @@ export default function ScaffoldedDerivation({ steps, onComplete }: Props) {
                           </button>
                         )}
 
-                        {step.interimQuestion!.correctAnswer && isHinting && (
+                        {step.interimQuestion?.correctAnswer && isHinting && (
                           <div
                             className="rounded-lg p-3 text-xs"
                             style={{ background: 'var(--success-soft)', color: 'var(--success)', border: '1px solid var(--border)' }}
                           >
-                            <strong>תשובה:</strong> {step.interimQuestion!.correctAnswer}
+                            <strong>תשובה:</strong> {step.interimQuestion.correctAnswer}
                           </div>
                         )}
                       </div>

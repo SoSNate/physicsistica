@@ -113,7 +113,7 @@ const STEPS: DerivationStep[] = [
     interimQuestion: {
       prompt: 'מה משמעות μ>0 לעומת μ<0?',
       hint: 'μ גבוה ← הוספת חלקיק מורידה אנרגיה חופשית',
-      validate: s => s.includes('הוסף') || s.includes('מחיר') || s.includes('אנרגי') || true,
+      validate: s => s.includes('הוסף') || s.includes('מחיר') || s.includes('אנרגי'),
       correctAnswer: 'μ>0: הוספת חלקיק "מועילה" — גז צפוף/קר. μ<0: הוספה "עולה" — גז דליל/חם.',
     },
   },

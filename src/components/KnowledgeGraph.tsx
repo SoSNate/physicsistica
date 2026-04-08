@@ -36,20 +36,24 @@ export default function KnowledgeGraph({ onNodeClick }: Props) {
   const allNodeIds = ALL_NODES.map(n => n.id)
   const allProgress = useMemo(() => loadAllProgress(allNodeIds), [])
 
-  // Compute positions
-  const positions: Record<string, { x: number; y: number }> = {}
-  UNITS.forEach((unit, ui) => {
-    unit.nodes.forEach((node, ni) => {
-      positions[node.id] = {
-        x: PAD_X + ui * COL_W,
-        y: PAD_Y + ni * ROW_H,
-      }
+  // Compute positions (memoized — stable across renders)
+  const { positions, svgW, svgH } = useMemo(() => {
+    const pos: Record<string, { x: number; y: number }> = {}
+    UNITS.forEach((unit, ui) => {
+      unit.nodes.forEach((node, ni) => {
+        pos[node.id] = {
+          x: PAD_X + ui * COL_W,
+          y: PAD_Y + ni * ROW_H,
+        }
+      })
     })
-  })
-
-  const maxRows = Math.max(...UNITS.map(u => u.nodes.length))
-  const svgW    = PAD_X * 2 + (UNITS.length - 1) * COL_W + NODE_W
-  const svgH    = PAD_Y * 2 + (maxRows - 1) * ROW_H + NODE_H
+    const maxRows = Math.max(...UNITS.map(u => u.nodes.length))
+    return {
+      positions: pos,
+      svgW: PAD_X * 2 + (UNITS.length - 1) * COL_W + NODE_W,
+      svgH: PAD_Y * 2 + (maxRows - 1) * ROW_H + NODE_H,
+    }
+  }, [])
 
   // Build edges from prereqs
   const edges: { from: NodeMeta; to: NodeMeta }[] = []

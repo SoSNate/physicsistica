@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react'
+import React, { useState, useEffect, lazy, Suspense, Component } from 'react'
 import { motion } from 'framer-motion'
 import { BookOpen, BarChart2, Map, ChevronLeft } from 'lucide-react'
 import ThemeToggle from './components/ThemeToggle'
@@ -79,15 +79,18 @@ export default function App() {
   // ── Render node ────────────────────────────────────────────────────
   if (screen === 'node' && activeNodeId) {
     const NodeComponent = resolveNode(activeNodeId)
+    const handleBack = () => {
+      const node = ALL_NODES.find(n => n.id === activeNodeId)
+      if (node) { setActiveUnit(node.unitId); setScreen('unit') }
+      else goHome()
+    }
     if (NodeComponent) {
       return (
-        <Suspense fallback={<LoadingScreen />}>
-          <NodeComponent onBack={() => {
-            const node = ALL_NODES.find(n => n.id === activeNodeId)
-            if (node) { setActiveUnit(node.unitId); setScreen('unit') }
-            else goHome()
-          }} />
-        </Suspense>
+        <NodeErrorBoundary onBack={handleBack}>
+          <Suspense fallback={<LoadingScreen />}>
+            <NodeComponent onBack={handleBack} />
+          </Suspense>
+        </NodeErrorBoundary>
       )
     }
     return <ComingSoon nodeId={activeNodeId} onBack={() => { setScreen('unit') }} />
@@ -113,7 +116,8 @@ export default function App() {
 
   // ── Unit screen ────────────────────────────────────────────────────
   if (screen === 'unit' && activeUnit) {
-    const unit = UNITS.find(u => u.id === activeUnit)!
+    const unit = UNITS.find(u => u.id === activeUnit)
+    if (!unit) { goHome(); return null }
     const progress = loadAllProgress(unit.nodes.map(n => n.id))
     const color = UNIT_COLORS[activeUnit - 1]
 
@@ -318,6 +322,36 @@ function LoadingScreen() {
       <div className="text-sm anim-pulse" style={{ color: 'var(--text-muted)' }}>טוען...</div>
     </div>
   )
+}
+
+class NodeErrorBoundary extends Component<
+  { children: React.ReactNode; onBack: () => void },
+  { hasError: boolean }
+> {
+  constructor(props: { children: React.ReactNode; onBack: () => void }) {
+    super(props)
+    this.state = { hasError: false }
+  }
+  static getDerivedStateFromError() { return { hasError: true } }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div dir="rtl" className="min-h-screen flex flex-col items-center justify-center gap-4 p-6" style={{ background: 'var(--bg)' }}>
+          <div className="text-4xl">⚠️</div>
+          <h2 className="font-bold text-lg text-center" style={{ color: 'var(--text)' }}>אירעה שגיאה בטעינת הצומת</h2>
+          <p className="text-sm text-center" style={{ color: 'var(--text-muted)' }}>נסה לרענן את הדף, או חזור לרשימת הצמתים.</p>
+          <button
+            onClick={this.props.onBack}
+            className="px-5 py-2 rounded-xl text-sm font-semibold transition-all active:scale-95"
+            style={{ background: 'var(--accent)', color: '#fff' }}
+          >
+            חזרה
+          </button>
+        </div>
+      )
+    }
+    return this.props.children
+  }
 }
 
 function ComingSoon({ nodeId, onBack }: { nodeId: string; onBack: () => void }) {
