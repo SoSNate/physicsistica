@@ -63,6 +63,29 @@ export interface NodeProgress {
 }
 
 /* ─── Unit metadata ─────────────────────────────────────────────── */
+
+/* Practice system ──────────────────────────────────────────────────── */
+export type PracticeQuestionType = 'numeric' | 'conceptual' | 'visual' | 'estimation'
+export type PracticeConfidence  = 'knew' | 'unsure' | 'missed'
+
+export interface PracticeQuestion {
+  id:             string
+  nodeId:         string
+  unitId:         number
+  type:           PracticeQuestionType
+  difficulty:     1 | 2 | 3
+  prompt:         ReactNode
+  answer:         ReactNode
+  visualization?: () => ReactNode
+  tags:           string[]
+}
+
+export interface PracticeRecord {
+  lastSeen:   string
+  confidence: PracticeConfidence
+  timesShown: number
+}
+
 export interface UnitMeta {
   id: number
   title: string

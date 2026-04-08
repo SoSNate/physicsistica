@@ -1,9 +1,10 @@
 import React, { useState, useEffect, lazy, Suspense, Component } from 'react'
 import { motion } from 'framer-motion'
-import { BookOpen, BarChart2, Map, ChevronLeft } from 'lucide-react'
+import { BookOpen, BarChart2, Map, ChevronLeft, Target } from 'lucide-react'
 import ThemeToggle from './components/ThemeToggle'
 import GlassCard from './components/GlassCard'
 import KnowledgeGraph from './components/KnowledgeGraph'
+import PracticeMode from './components/PracticeMode'
 import { UNITS, ALL_NODES } from './data/units'
 import { loadAllProgress } from './hooks/useNodeProgress'
 
@@ -42,7 +43,7 @@ const Node53 = lazy(() => import('./units/unit5/Node53'))
 const Node54 = lazy(() => import('./units/unit5/Node54'))
 const Node55 = lazy(() => import('./units/unit5/Node55'))
 
-type Screen = 'home' | 'unit' | 'node' | 'graph'
+type Screen = 'home' | 'unit' | 'node' | 'graph' | 'practice'
 
 const UNIT_COLORS = [
   '#0D9488', '#7C3AED', '#EA580C', '#0369A1', '#BE185D',
@@ -94,6 +95,11 @@ export default function App() {
       )
     }
     return <ComingSoon nodeId={activeNodeId} onBack={() => { setScreen('unit') }} />
+  }
+
+  // ── Practice mode ─────────────────────────────────────────────────
+  if (screen === 'practice') {
+    return <PracticeMode onBack={goHome} />
   }
 
   // ── Knowledge graph ────────────────────────────────────────────────
