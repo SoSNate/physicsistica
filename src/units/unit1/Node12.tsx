@@ -49,6 +49,22 @@ function GasSim({ speed }: { speed: number }) {
   const pressureRef = useRef<number[]>([])
   const [pressure, setPressure] = useState(0)
 
+  // Cache CSS vars — read once at mount and on theme change (class toggle on <html>)
+  const colorsRef = useRef({ card: '#242938', accent: '#6B8DD6' })
+  useEffect(() => {
+    function readColors() {
+      const s = getComputedStyle(document.documentElement)
+      colorsRef.current = {
+        card:   s.getPropertyValue('--card').trim()   || '#242938',
+        accent: s.getPropertyValue('--accent').trim() || '#6B8DD6',
+      }
+    }
+    readColors()
+    const obs = new MutationObserver(readColors)
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    return () => obs.disconnect()
+  }, [])
+
   // Re-init when speed changes (rescale velocities)
   useEffect(() => {
     molsRef.current = molsRef.current.map(m => {
@@ -65,18 +81,23 @@ function GasSim({ speed }: { speed: number }) {
     let impulseThisFrame = 0
 
     function tick() {
+      // Read cached colors once per frame — zero layout recalculations
+      const { card, accent } = colorsRef.current
+
       ctx.clearRect(0, 0, BOX_W, BOX_H)
 
       // Background
-      ctx.fillStyle = getComputedStyle(document.documentElement)
-        .getPropertyValue('--card').trim() || '#242938'
+      ctx.fillStyle = card
       ctx.fillRect(0, 0, BOX_W, BOX_H)
 
       // Walls
-      ctx.strokeStyle = getComputedStyle(document.documentElement)
-        .getPropertyValue('--accent').trim() || '#6B8DD6'
+      ctx.strokeStyle = accent
       ctx.lineWidth = 1.5
       ctx.strokeRect(1, 1, BOX_W - 2, BOX_H - 2)
+
+      // Set molecule style once before the loop
+      const fillColor  = accent + '99'
+      ctx.lineWidth = 1
 
       molsRef.current = molsRef.current.map(m => {
         let { x, y, vx, vy } = m
@@ -90,15 +111,12 @@ function GasSim({ speed }: { speed: number }) {
         if (y + R_MOL >= BOX_H) { vy = -Math.abs(vy); y = BOX_H - R_MOL }
         if (y - R_MOL <= 0)     { vy =  Math.abs(vy); y = R_MOL }
 
-        // Draw molecule
-        const accent = getComputedStyle(document.documentElement)
-          .getPropertyValue('--accent').trim() || '#6B8DD6'
+        // Draw molecule — use pre-cached colors, no getComputedStyle inside loop
         ctx.beginPath()
         ctx.arc(x, y, R_MOL, 0, Math.PI * 2)
-        ctx.fillStyle = accent + '99'
+        ctx.fillStyle = fillColor
         ctx.fill()
         ctx.strokeStyle = accent
-        ctx.lineWidth = 1
         ctx.stroke()
 
         return { x, y, vx, vy }

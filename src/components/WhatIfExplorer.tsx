@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useState, useRef, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { HelpCircle } from 'lucide-react'
 import GlassCard from './GlassCard'
@@ -36,16 +36,24 @@ export default function WhatIfExplorer({
   renderVisualization,
   questions,
 }: WhatIfExplorerProps) {
-  const [values, setValues] = useState<Record<string, number>>(
-    () => Object.fromEntries(params.map(p => [p.key, p.defaultValue]))
-  )
+  const initialValues = () => Object.fromEntries(params.map(p => [p.key, p.defaultValue]))
+  const [values, setValues] = useState<Record<string, number>>(initialValues)
+  // Separate state for the formula — updated at most every 50ms to avoid KaTeX thrashing
+  const [formulaValues, setFormulaValues] = useState<Record<string, number>>(initialValues)
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>()
   const [activeQ, setActiveQ] = useState<number | null>(null)
 
   function setValue(key: string, val: number) {
+    // Update slider position and numeric label immediately
     setValues(prev => ({ ...prev, [key]: val }))
+    // Debounce the KaTeX formula re-render to max ~20 updates/sec
+    clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => {
+      setFormulaValues(prev => ({ ...prev, [key]: val }))
+    }, 50)
   }
 
-  const formula = renderFormula(values)
+  const formula = renderFormula(formulaValues)
 
   return (
     <GlassCard padding="none" className="overflow-hidden">

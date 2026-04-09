@@ -77,3 +77,11 @@ export const UNITS: UnitMeta[] = [
 ]
 
 export const ALL_NODES = UNITS.flatMap(u => u.nodes)
+
+/** Shared unit color palette — single source of truth */
+export const UNIT_COLOR_MAP: Record<number, string> = {
+  1: '#0D9488', 2: '#7C3AED', 3: '#EA580C', 4: '#0369A1', 5: '#BE185D',
+}
+export const UNIT_COLORS_ARRAY: string[] = [
+  '#0D9488', '#7C3AED', '#EA580C', '#0369A1', '#BE185D',
+]

@@ -204,18 +204,13 @@ export function usePracticeSession(
     save(KEY_XP, nextXp)
     setXp(nextXp)
 
-    // daily
+    // daily — streak bumps exactly once when the daily goal count is just reached
+    const nextAnswered = daily.answered + 1
     const nextDaily: DailyStats = {
       ...daily,
-      answered: daily.answered + 1,
+      answered: nextAnswered,
       knew: daily.knew + (confidence === 'knew' ? 1 : 0),
-      streak: daily.answered + 1 >= DAILY_GOAL && daily.streak === daily.streak
-        ? Math.max(daily.streak, daily.answered + 1 >= DAILY_GOAL ? daily.streak + (daily.answered === DAILY_GOAL - 1 ? 1 : 0) : daily.streak)
-        : daily.streak,
-    }
-    // bump streak on hitting daily goal
-    if (nextDaily.answered === DAILY_GOAL) {
-      nextDaily.streak = daily.streak + 1
+      streak: nextAnswered === DAILY_GOAL ? daily.streak + 1 : daily.streak,
     }
     save(KEY_DAY, nextDaily)
     setDaily(nextDaily)

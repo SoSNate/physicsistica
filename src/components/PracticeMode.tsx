@@ -12,14 +12,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, Target, RotateCcw, BarChart2, Flame, Zap } from 'lucide-react'
 import { usePracticeSession, DAILY_GOAL, BADGE_DEFS } from '../hooks/usePracticeSession'
 import PracticeCard from './PracticeCard'
-import { UNITS } from '../data/units'
+import { UNITS, UNIT_COLOR_MAP } from '../data/units'
 import type { PracticeConfidence } from '../types'
 
 interface Props { onBack: () => void }
 
-const UNIT_COLORS: Record<number, string> = {
-  1: '#0D9488', 2: '#7C3AED', 3: '#EA580C', 4: '#0369A1', 5: '#BE185D',
-}
+const UNIT_COLORS = UNIT_COLOR_MAP
 
 type Tab = 'session' | 'stats'
 

@@ -9,6 +9,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, Timer, CheckCircle, XCircle, GraduationCap } from 'lucide-react'
 import { PRACTICE_BANK } from '../data/practiceBank'
+import { UNIT_COLOR_MAP } from '../data/units'
 import GlassCard from './GlassCard'
 import { BlockMath } from './MathBlock'
 
@@ -37,9 +38,7 @@ function buildExam(): typeof PRACTICE_BANK {
   return pool.slice(0, EXAM_SIZE)
 }
 
-const UNIT_COLORS: Record<number, string> = {
-  1: '#0D9488', 2: '#7C3AED', 3: '#EA580C', 4: '#0369A1', 5: '#BE185D',
-}
+const UNIT_COLORS = UNIT_COLOR_MAP
 
 export default function ExamMode({ onBack }: Props) {
   const [phase, setPhase] = useState<'intro' | 'exam' | 'results'>('intro')
@@ -48,18 +47,27 @@ export default function ExamMode({ onBack }: Props) {
   const [revealed, setRevealed] = useState(false)
   const [answers,  setAnswers]  = useState<Record<number, boolean>>({})
   const [timeLeft, setTimeLeft] = useState(EXAM_DURATION)
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const timerRef   = useRef<ReturnType<typeof setInterval> | null>(null)
+  // Single-ownership flag — whichever path fires first wins; the other is a no-op
+  const examDoneRef = useRef(false)
 
-  // Timer
+  // Timer — owns the interval; cleanup is the only place clearInterval is called
   useEffect(() => {
     if (phase !== 'exam') return
+    examDoneRef.current = false          // reset on each new exam session
     timerRef.current = setInterval(() => {
       setTimeLeft(t => {
-        if (t <= 1) { clearInterval(timerRef.current!); setPhase('results'); return 0 }
+        if (t <= 1) {
+          if (!examDoneRef.current) {
+            examDoneRef.current = true
+            setPhase('results')          // phase flip triggers cleanup below
+          }
+          return 0
+        }
         return t - 1
       })
     }, 1000)
-    return () => clearInterval(timerRef.current!)
+    return () => clearInterval(timerRef.current!)   // single clearInterval owner
   }, [phase])
 
   const formatTime = (s: number) => {
@@ -72,8 +80,11 @@ export default function ExamMode({ onBack }: Props) {
     setAnswers(prev => ({ ...prev, [current]: correct }))
     setRevealed(false)
     if (current + 1 >= questions.length) {
-      clearInterval(timerRef.current!)
-      setPhase('results')
+      // Guard: only one path may transition to results
+      if (!examDoneRef.current) {
+        examDoneRef.current = true
+        setPhase('results')              // phase flip triggers useEffect cleanup → interval cleared
+      }
     } else {
       setCurrent(c => c + 1)
     }

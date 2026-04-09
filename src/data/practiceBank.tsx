@@ -646,6 +646,88 @@ const extra: PracticeQuestion[] = [
       <p className="text-xs opacity-70">שיווי-משקל: μ_1 = μ_2 (כמו T לחום, P לנפח)</p>
     </div>,
     ['chemical-potential','grand-canonical']),
+
+  // ── שאלות גבול אסימפטוטי (Tier 2 additions) ──────────────────────
+  q('asym-q1','4.2',4,'conceptual',3,
+    <p>
+      מה גבול פונקציית החלוקה <M tex="Z" /> של אוסצילטור הרמוני קוונטי
+      (תדר <M tex="\omega" />) כאשר <M tex="T\to 0" />?
+      מה ה-<M tex="\langle E\rangle" /> המתאים, ולמה הוא <em>אינו</em> אפס?
+    </p>,
+    <div className="text-sm space-y-2">
+      <p>
+        <M tex="Z=\sum_{n=0}^\infty e^{-\beta\hbar\omega(n+\tfrac{1}{2})}
+          =\frac{e^{-\beta\hbar\omega/2}}{1-e^{-\beta\hbar\omega}}" />
+      </p>
+      <p>
+        כאשר <M tex="T\to 0" /> (כלומר <M tex="\beta\to\infty" />):
+        <M tex="Z \to e^{-\beta\hbar\omega/2}" /> (רק הרמה הבסיסית תורמת).
+      </p>
+      <p>
+        <M tex="\langle E\rangle = -\frac{\partial\ln Z}{\partial\beta}
+          \xrightarrow{T\to 0} \frac{\hbar\omega}{2}" />
+      </p>
+      <p className="text-xs opacity-70">
+        אנרגיית האפס (<M tex="\hbar\omega/2" />) נובעת מעקרון אי-הוודאות של הייזנברג —
+        האוסצילטור אינו יכול לנוח. זהו מקור הלחץ הקוונטי בננסים לבנים.
+      </p>
+    </div>,
+    ['partition-function','zero-point-energy','T-to-zero','asymptotic']),
+
+  q('asym-q2','2.2',2,'conceptual',3,
+    <p>
+      עבור מערכת פרה-מגנטית של <M tex="N" /> ספינים עם <M tex="q" /> ספינים למעלה,
+      הראה שהרוחב היחסי של פיק <M tex="\Omega" /> סביב המקסימום הוא
+      מסדר <M tex="1/\sqrt{N}" />.
+      מה המסקנה עבור <M tex="N\to\infty" />?
+    </p>,
+    <div className="text-sm space-y-2">
+      <p>
+        <M tex="\Omega(N,q)\approx\Omega_{max}\exp\!\left(-\frac{2(q-N/2)^2}{N}\right)" />
+      </p>
+      <p>
+        הגאוסיין יש רוחב (סטיית תקן) <M tex="\sigma_q=\sqrt{N}/2" />,
+        כך שהרוחב <em>היחסי</em>:
+        <M tex="\frac{\sigma_q}{N/2}=\frac{1}{\sqrt{N}}" />
+      </p>
+      <p>
+        <M tex="N\to\infty" />: הפיק מתחדד כ-<M tex="1/\sqrt{N}\to 0" /> — המצב המאקרוסקופי
+        שנצפה הוא המצב היחיד שתורם. זו הסיבה שתרמודינמיקה "עובדת".
+      </p>
+      <p className="text-xs opacity-70">
+        הרחב: שגיאת המדידה של <M tex="\langle E\rangle" /> יורדת כ-<M tex="1/\sqrt{N}" /> —
+        אותה סיבה שמשתנים מאקרוסקופיים מוגדרים היטב.
+      </p>
+    </div>,
+    ['multiplicity','stirling','N-to-infinity','asymptotic','fluctuations']),
+
+  q('asym-q3','5.2',5,'conceptual',3,
+    <p>
+      הראה שסטטיסטיקת פרמי-דיראק מתנוונת לסטטיסטיקה קלאסית (מקסוול-בולצמן)
+      בגבול <M tex="e^{\beta(\varepsilon-\mu)}\gg 1" />.
+      באיזה תנאי פיזיקלי מתקיים תנאי זה?
+    </p>,
+    <div className="text-sm space-y-2">
+      <p>
+        פונקציית אכלוס פרמי-דיראק:
+        <M tex="\bar{n}_{FD}=\frac{1}{e^{\beta(\varepsilon-\mu)}+1}" />
+      </p>
+      <p>
+        אם <M tex="e^{\beta(\varepsilon-\mu)}\gg 1" /> אזי <M tex="+1" /> זניח:
+        <M tex="\bar{n}_{FD}\approx e^{-\beta(\varepsilon-\mu)}=e^{\beta\mu}\cdot e^{-\beta\varepsilon}" />
+      </p>
+      <p>
+        זהו בדיוק גורם בולצמן של מ"ב, עם <M tex="e^{\beta\mu}" /> כקבוע נירמול.
+      </p>
+      <p>
+        התנאי מתקיים כאשר <M tex="n\lambda^3\ll 1" /> (<M tex="\lambda" /> — גל דה-ברויי):
+        טמפרטורה גבוהה או צפיפות נמוכה. כלומר: גז דליל וחם = קלאסי.
+      </p>
+      <p className="text-xs opacity-70">
+        עבור בוזונים (BE): אותו גבול, אך <M tex="-1" /> במכנה → MB. שתי הסטטיסטיקות מתמזגות.
+      </p>
+    </div>,
+    ['fermi-dirac','maxwell-boltzmann','classical-limit','asymptotic','chemical-potential']),
 ]
 
 // ════════════════════════════════════════════════════════════════════

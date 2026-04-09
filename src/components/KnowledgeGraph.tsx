@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { motion } from 'framer-motion'
-import { UNITS, ALL_NODES } from '../data/units'
+import { UNITS, ALL_NODES, UNIT_COLORS_ARRAY } from '../data/units'
 import { loadAllProgress } from '../hooks/useNodeProgress'
 import type { NodeStatus, NodeMeta } from '../types'
 
@@ -15,13 +15,7 @@ const STATUS_COLORS: Record<NodeStatus, string> = {
   done:        'var(--success)',
 }
 
-const UNIT_COLORS = [
-  '#0D9488', // teal   — unit 1
-  '#7C3AED', // violet — unit 2
-  '#EA580C', // orange — unit 3
-  '#0369A1', // blue   — unit 4
-  '#BE185D', // pink   — unit 5
-]
+const UNIT_COLORS = UNIT_COLORS_ARRAY
 
 // Layout: 5 columns (one per unit), nodes stacked vertically
 const COL_W  = 160
@@ -64,8 +58,19 @@ export default function KnowledgeGraph({ onNodeClick }: Props) {
     })
   })
 
+  function arePrereqsMet(nodeId: string): boolean {
+    const node = ALL_NODES.find(n => n.id === nodeId)
+    if (!node || node.prereqs.length === 0) return true
+    return node.prereqs.every(reqId => allProgress[reqId]?.status === 'done')
+  }
+
   function getStatus(nodeId: string): NodeStatus {
-    return allProgress[nodeId]?.status ?? 'available'
+    const stored = allProgress[nodeId]?.status
+    // Already in-progress or done — respect stored status
+    if (stored === 'done' || stored === 'in_progress') return stored
+    // Not started yet: check if prerequisites are met
+    if (!arePrereqsMet(nodeId)) return 'locked'
+    return stored ?? 'available'
   }
 
   return (
@@ -119,13 +124,19 @@ export default function KnowledgeGraph({ onNodeClick }: Props) {
           const color     = UNIT_COLORS[unitIdx]
           const isDone    = status === 'done'
           const isActive  = status === 'in_progress'
+          const isLocked  = status === 'locked'
 
           return (
             <motion.g
               key={node.id}
-              style={{ cursor: 'pointer' }}
-              whileHover={{ scale: 1.04 }}
-              onClick={() => onNodeClick(node.id)}
+              role="button"
+              aria-label={`${node.id} — ${node.title}${isLocked ? ' (נעול)' : isDone ? ' (הושלם)' : ''}`}
+              aria-disabled={isLocked}
+              tabIndex={isLocked ? -1 : 0}
+              onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && !isLocked && onNodeClick(node.id)}
+              style={{ cursor: isLocked ? 'not-allowed' : 'pointer', opacity: isLocked ? 0.45 : 1 }}
+              whileHover={isLocked ? {} : { scale: 1.04 }}
+              onClick={() => !isLocked && onNodeClick(node.id)}
             >
               {/* Card bg */}
               <rect
@@ -189,8 +200,12 @@ export default function KnowledgeGraph({ onNodeClick }: Props) {
                 fill={STATUS_COLORS[status]}
               />
 
+              {/* Lock indicator */}
+              {isLocked && (
+                <text x={x + NODE_W - 20} y={y + NODE_H - 7} fontSize={10} fill="var(--text-muted)">🔒</text>
+              )}
               {/* Scaffolded indicator */}
-              {node.isScaffolded && (
+              {node.isScaffolded && !isLocked && (
                 <text x={x + NODE_W - 20} y={y + NODE_H - 7} fontSize={9} fill="var(--warn)">⚙️</text>
               )}
             </motion.g>

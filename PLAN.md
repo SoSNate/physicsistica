@@ -68,18 +68,15 @@
 
 ---
 
+## ✅ Phase 2 — נגישות (הושלם)
+
+### F — נגישות ✅
+- [x] `lang="he"` + `dir="rtl"` על html element
+- [x] `aria-label` + `role="button"` + `tabIndex` על nodes ב-KnowledgeGraph
+- [x] Skip-to-content link (`.skip-link` ב-index.html + CSS)
+- [x] `:focus-visible` styles לכל הרכיבים
+
 ## 🚧 יעדים פתוחים
-
-### E — גמיפיקציה (חלקי — XP+Badges done, נותר:)
-- [ ] Leaderboard (LocalStorage based, אנונימי)
-- [ ] Level system (XP → level 1-10 עם title)
-- [ ] Profile screen — סיכום XP + badges + streak
-
-### F — נגישות (נותר:)
-- [ ] `lang="he"` על html element
-- [ ] `aria-label` על אייקונים ב-KnowledgeGraph
-- [ ] Skip-to-content link
-- [ ] Focus styles visible בkeyboard nav
 
 ### A — QA ושיפור איכות תוכן
 - [ ] **בדיקת כל 28 נודים** — בדיקה ידנית: האם הסימולטור עובד, האם המתמטיקה נכונה
@@ -87,22 +84,6 @@
 - [ ] **TrapCard** בכל node — לוודא שהנוסחאות הלא-נכונות אכן מוצגות נכון ב-KaTeX
 - [ ] **WhatIfExplorer** — לוודא שהחישובים בכל answer function נכונים מתמטית
 - [ ] הוספת **examExample** ל-TrapInfo (שאלות בחינה אמיתיות) ב-10 נודים מרכזיים
-
-### B — Practice Mode — שיפורים
-- [ ] **Spaced Repetition אמיתי** — SM-2 algorithm (interval × easiness factor)
-- [ ] **סטטיסטיקות לסטודנט** — streak, accuracy per unit, weak spots
-- [ ] **Session summary** — בסוף כל סשן: כמה ידעתי / לא ידעתי / צריך לחזור
-- [ ] **Daily goal** — "5 שאלות ליום" עם progress ring
-- [ ] **Filter by difficulty** — הצג רק קשות / רק קלות
-- [ ] הוספת ~30 שאלות נוספות (ל-118 סה"כ) — דגש על חישוביות לבחינה
-
-### C — ניווט ו-UX
-- [ ] **Breadcrumb** בתוך node — "יחידה 3 › node 3.2"
-- [ ] **Progress bar** בראש כל unit page — X/Y nodes completed
-- [ ] **כפתור "המשך מאיפה עצרתי"** ב-Home screen
-- [ ] **Confetti animation** בסיום node מלא (100% complete)
-- [ ] **Mobile responsive** — בדיקה ייעודית ב-375px (iPhone SE)
-- [ ] **Loading skeleton** בזמן lazy load של node במקום spinner גנרי
 
 ---
 

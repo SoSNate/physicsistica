@@ -1,19 +1,14 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { PracticeQuestion, PracticeConfidence } from '../types'
+import { UNIT_COLOR_MAP } from '../data/units'
 
 interface Props {
   question: PracticeQuestion
   onAnswer: (confidence: PracticeConfidence) => void
 }
 
-const UNIT_COLORS: Record<number, string> = {
-  1: '#0D9488',
-  2: '#7C3AED',
-  3: '#EA580C',
-  4: '#0369A1',
-  5: '#BE185D',
-}
+const UNIT_COLORS = UNIT_COLOR_MAP
 
 const TYPE_LABELS: Record<string, string> = {
   numeric:    'חישוב',

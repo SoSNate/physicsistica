@@ -6,7 +6,7 @@ import GlassCard from './components/GlassCard'
 import KnowledgeGraph from './components/KnowledgeGraph'
 import PracticeMode from './components/PracticeMode'
 import ExamMode from './components/ExamMode'
-import { UNITS, ALL_NODES } from './data/units'
+import { UNITS, ALL_NODES, UNIT_COLORS_ARRAY } from './data/units'
 import { loadAllProgress } from './hooks/useNodeProgress'
 
 // ── Lazy-load all nodes ────────────────────────────────────────────
@@ -46,9 +46,7 @@ const Node55 = lazy(() => import('./units/unit5/Node55'))
 
 type Screen = 'home' | 'unit' | 'node' | 'graph' | 'practice' | 'exam'
 
-const UNIT_COLORS = [
-  '#0D9488', '#7C3AED', '#EA580C', '#0369A1', '#BE185D',
-]
+const UNIT_COLORS = UNIT_COLORS_ARRAY
 
 export default function App() {
   const [screen, setScreen]       = useState<Screen>('home')
@@ -67,7 +65,15 @@ export default function App() {
     setScreen('unit')
   }
 
+  function isNodeLocked(nodeId: string): boolean {
+    const node = ALL_NODES.find(n => n.id === nodeId)
+    if (!node || node.prereqs.length === 0) return false
+    const progress = loadAllProgress(node.prereqs)
+    return node.prereqs.some(reqId => progress[reqId]?.status !== 'done')
+  }
+
   function openNode(nodeId: string) {
+    if (isNodeLocked(nodeId)) return
     setActiveNodeId(nodeId)
     setScreen('node')
   }
@@ -155,6 +161,7 @@ export default function App() {
             const np = progress[node.id]
             const isDone = np?.status === 'done'
             const isActive = np?.status === 'in_progress'
+            const locked = isNodeLocked(node.id)
 
             return (
               <motion.div
@@ -162,12 +169,13 @@ export default function App() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.06 }}
+                style={{ opacity: locked ? 0.5 : 1 }}
               >
                 <GlassCard
-                  hover
+                  hover={!locked}
                   padding="md"
-                  onClick={() => openNode(node.id)}
-                  style={{ borderColor: isDone ? 'var(--success)' : isActive ? color : undefined }}
+                  onClick={() => !locked && openNode(node.id)}
+                  style={{ borderColor: isDone ? 'var(--success)' : isActive ? color : undefined, cursor: locked ? 'not-allowed' : 'pointer' }}
                 >
                   <div className="flex items-start gap-3">
                     {/* Number badge */}
@@ -180,7 +188,11 @@ export default function App() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <h3 className="font-semibold text-sm" style={{ color: 'var(--text)' }}>{node.title}</h3>
-                        {node.isScaffolded && (
+                        {locked && (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded-md font-medium"
+                            style={{ background: 'var(--border)', color: 'var(--text-muted)' }}>🔒 נעול</span>
+                        )}
+                        {node.isScaffolded && !locked && (
                           <span className="text-[10px] px-1.5 py-0.5 rounded-md font-medium"
                             style={{ background: 'var(--warn-soft)', color: 'var(--warn)' }}>⚙️ גזירה</span>
                         )}
@@ -224,7 +236,7 @@ export default function App() {
     ?? ALL_NODES.find(n => !allProgress[n.id] || allProgress[n.id]?.status === 'available')
 
   return (
-    <div dir="rtl" className="min-h-screen p-4 pb-8" style={{ background: 'var(--bg)' }}>
+    <div id="main" dir="rtl" className="min-h-screen p-4 pb-8" style={{ background: 'var(--bg)' }}>
       {/* Top bar */}
       <div className="flex items-center justify-between mb-6">
         <div>

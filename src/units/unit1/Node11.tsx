@@ -28,6 +28,19 @@ function SingleMolSim() {
 
   const W = 280, H = 180, R = 8
 
+  // Cache CSS vars — read once at mount and on theme change
+  const colorsRef = useRef({ card: '#1a2035' })
+  useEffect(() => {
+    function readColors() {
+      const s = getComputedStyle(document.documentElement)
+      colorsRef.current = { card: s.getPropertyValue('--card').trim() || '#1a2035' }
+    }
+    readColors()
+    const obs = new MutationObserver(readColors)
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    return () => obs.disconnect()
+  }, [])
+
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -52,8 +65,8 @@ function SingleMolSim() {
       }
       if (s.flash > 0) s.flash--
 
-      // Background
-      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--card').trim() || '#1a2035'
+      // Background — use cached color, no getComputedStyle per frame
+      ctx.fillStyle = colorsRef.current.card
       ctx.fillRect(0, 0, W, H)
 
       // Walls

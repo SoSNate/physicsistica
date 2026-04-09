@@ -20,24 +20,26 @@ const R = 8.314
 function cvEinstein(T: number, thetaE: number): number {
   if (T < 1) return 0
   const x = thetaE / T
-  return R * x * x * Math.exp(x) / Math.pow(Math.exp(x) - 1, 2)
+  return 3 * R * x * x * Math.exp(x) / Math.pow(Math.exp(x) - 1, 2)
 }
 
 function cvDebye(T: number, thetaD: number): number {
   if (T < 1) return 0
   if (T > thetaD * 2) return 3 * R
   const t = T / thetaD
-  // Approximate: low-T limit T³ law
+  // Low-T limit: exact T³ law (Debye)
   if (t < 0.1) return 234 * R * t * t * t
-  // Higher T: use Padé-like interpolation
-  const x = thetaD / T
-  const nBE = (ex: number) => 1 / (Math.exp(ex) - 1)
-  let sum = 0, n = 100
+  // Numerical integration: C_V = 9R(T/Θ_D)³ ∫₀^{Θ_D/T} x⁴eˣ/(eˣ-1)² dx
+  const x = thetaD / T          // upper limit of integral = Θ_D/T
+  const n = 200                 // integration points
+  const dx = x / n
+  let sum = 0
   for (let i = 1; i <= n; i++) {
-    const xi = x * i / n
-    sum += xi * xi * Math.exp(xi) / Math.pow(Math.exp(xi) - 1, 2) / (n)
+    const xi = dx * (i - 0.5)  // midpoint rule for better accuracy
+    const ex = Math.exp(xi)
+    sum += xi * xi * xi * xi * ex / Math.pow(ex - 1, 2)
   }
-  return R * 3 * sum * x * 3
+  return 9 * R * (t * t * t) * sum * dx
 }
 
 // ══════════════════════════════════════════════════════════════════════

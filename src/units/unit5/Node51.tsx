@@ -17,6 +17,60 @@ import type { DerivationStep } from '../../types'
 const meta = UNITS[4].nodes[0]
 
 // ══════════════════════════════════════════════════════════════════════
+// QUANTUM BRIDGE — רקע קוונטי נדרש
+// ══════════════════════════════════════════════════════════════════════
+function QuantumBridgeRecap() {
+  return (
+    <GlassCard padding="md" className="mb-4">
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-base">🌉</span>
+        <h3 className="font-bold text-sm" style={{ color: 'var(--accent)' }}>
+          גשר: ממכניקה סטטיסטית קלאסית לסטטיסטיקה קוונטית
+        </h3>
+      </div>
+      <div className="space-y-3 text-xs" style={{ color: 'var(--text-muted)' }}>
+        <div className="rounded-lg p-2.5 space-y-1" style={{ background: 'var(--accent-soft)' }}>
+          <p className="font-semibold" style={{ color: 'var(--text)' }}>מה כבר ידוע (יחידות 1–4)</p>
+          <p>• אנרגיה ממוצעת: <M tex="\langle E\rangle = -\partial\ln Z/\partial\beta" /></p>
+          <p>• גז אידיאלי קלאסי: חלקיקים <em>ניתנים להבחנה</em>, אנרגיות רציפות</p>
+          <p>• פונקציית חלוקה: <M tex="Z=\sum_i e^{-\beta\varepsilon_i}" /></p>
+        </div>
+
+        <div className="rounded-lg p-2.5 space-y-1" style={{ background: 'var(--bg-secondary, var(--border))' }}>
+          <p className="font-semibold" style={{ color: 'var(--text)' }}>מה קוונטי מחדש (יחידה 5)</p>
+          <p>
+            <strong style={{ color: 'var(--text)' }}>כמות אנרגיה:</strong>{' '}
+            חלקיקים לא יכולים לשאת כל אנרגיה — רק ערכים בדידים:
+            <M tex="\varepsilon_n = \hbar\omega(n+\tfrac{1}{2})" /> (אוסצילטור), רמות בקופסה וכו׳.
+          </p>
+          <p>
+            <strong style={{ color: 'var(--text)' }}>חלקיקים זהים ובלתי-ניתנים להבחנה:</strong>{' '}
+            חלקיקים קוונטיים מאותו סוג <em>זהים לחלוטין</em> — אין "תווית" עליהם.
+            חילוף שניים אינו יוצר מצב חדש.
+          </p>
+          <p>
+            <strong style={{ color: 'var(--text)' }}>ספין ומסטטיסטיקה:</strong>{' '}
+            ספין שלם → <strong>בוזונים</strong> (BE): ריבוי אכלוס ∞ מותר.{' '}
+            ספין חצי-שלם → <strong>פרמיונים</strong> (FD): עקרון פאולי — לכל מצב לכל היותר חלקיק אחד.
+          </p>
+        </div>
+
+        <div className="rounded-lg p-2.5" style={{ background: 'var(--accent-soft)' }}>
+          <p className="font-semibold mb-1" style={{ color: 'var(--text)' }}>
+            מדוע N אינו שמור? → צורך בצבר גרנד-קנוני
+          </p>
+          <p>
+            בקלאסיקה: N קבוע, השתמשנו בצבר קנוני.
+            בקוונטיקה: פוטונים/פונונים <em>נוצרים ונהרסים</em> — N משתנה.
+            לכן: מאגר המחליף גם אנרגיה <em>וגם חלקיקים</em>, עם פוטנציאל כימי μ כמשתנה שולט.
+          </p>
+        </div>
+      </div>
+    </GlassCard>
+  )
+}
+
+// ══════════════════════════════════════════════════════════════════════
 // EXPLORE — μ slider ורמות אנרגיה
 // ══════════════════════════════════════════════════════════════════════
 function ChemPotViz() {
@@ -140,7 +194,7 @@ const STEPS: DerivationStep[] = [
 export default function Node51({ onBack }: { onBack: () => void }) {
   return (
     <NodeLayout meta={meta} onBack={onBack}
-      explore={<div className="space-y-4"><GlassCard padding="md"><h3 className="font-semibold text-sm mb-3" style={{ color: 'var(--text)' }}>פוטנציאל כימי ואכלוס רמות</h3><ChemPotViz /></GlassCard></div>}
+      explore={<div className="space-y-4"><QuantumBridgeRecap /><GlassCard padding="md"><h3 className="font-semibold text-sm mb-3" style={{ color: 'var(--text)' }}>פוטנציאל כימי ואכלוס רמות</h3><ChemPotViz /></GlassCard></div>}
       build={<div className="space-y-4"><GlassCard padding="md"><p className="text-xs" style={{ color: 'var(--text-muted)' }}>הצבר גרנד-קנוני: μ כמשתנה שולט על N</p></GlassCard><ScaffoldedDerivation steps={STEPS} /></div>}
       apply={
         <div className="space-y-3">
