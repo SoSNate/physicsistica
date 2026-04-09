@@ -127,3 +127,24 @@ export interface UnitMeta {
   color: string           // CSS gradient string
   nodes: NodeMeta[]
 }
+
+/* ─── Mega Exam (real OUI exam simulation) ──────────────────────── */
+
+export interface ExamPart {
+  id: string           // "א", "ב", "ג", "ד"
+  prompt: ReactNode    // full part text with LaTeX
+  points: number       // e.g. 25
+  answer: ReactNode    // full solution text + math
+  trapId?: string      // known trap key — flagged in results if missed
+}
+
+export interface MegaQuestion {
+  id: string
+  unitId: number
+  source: string       // e.g. "2024ב מועד 81, שאלה 1"
+  context: ReactNode   // shared preamble shown throughout the question
+  parts: ExamPart[]
+  totalPoints: number  // sum of parts[].points
+}
+
+export type ExamPartResult = 'knew' | 'missed'

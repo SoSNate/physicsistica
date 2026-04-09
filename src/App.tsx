@@ -65,15 +65,12 @@ export default function App() {
     setScreen('unit')
   }
 
-  function isNodeLocked(nodeId: string): boolean {
-    const node = ALL_NODES.find(n => n.id === nodeId)
-    if (!node || node.prereqs.length === 0) return false
-    const progress = loadAllProgress(node.prereqs)
-    return node.prereqs.some(reqId => progress[reqId]?.status !== 'done')
+  // prereqs are informational (knowledge graph) — never hard-lock navigation
+  function isNodeLocked(_nodeId: string): boolean {
+    return false
   }
 
   function openNode(nodeId: string) {
-    if (isNodeLocked(nodeId)) return
     setActiveNodeId(nodeId)
     setScreen('node')
   }

@@ -40,7 +40,7 @@ export default function WhatIfExplorer({
   const [values, setValues] = useState<Record<string, number>>(initialValues)
   // Separate state for the formula — updated at most every 50ms to avoid KaTeX thrashing
   const [formulaValues, setFormulaValues] = useState<Record<string, number>>(initialValues)
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>()
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const [activeQ, setActiveQ] = useState<number | null>(null)
 
   function setValue(key: string, val: number) {
