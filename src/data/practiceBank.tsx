@@ -731,6 +731,371 @@ const extra: PracticeQuestion[] = [
 ]
 
 // ════════════════════════════════════════════════════════════════════
+// שאלות בסגנון ראש המרצה — מלכודות, גבולות, DOF נוסף
+// ════════════════════════════════════════════════════════════════════
+const profStyle: PracticeQuestion[] = [
+
+  // ── מלכודת Z_count: Z ≠ מספר מצבים ─────────────────────────────
+  q('prof-z1','4.1',4,'conceptual',2,
+    <div className="space-y-1 text-sm" dir="rtl">
+      <p>אטום בעל שלושה מצבים אנרגטיים: אנרגיות 0, ε, 2ε.</p>
+      <p>סטודנט טוען: "ב-<M tex="T\to\infty" /> מתקיים <M tex="Z=3" /> כי יש שלושה מצבים".</p>
+      <p className="font-semibold">מה נכון ומה שגוי בטענה זו?</p>
+    </div>,
+    <div className="text-sm space-y-2" dir="rtl">
+      <p>
+        <strong>נכון:</strong> בגבול <M tex="T\to\infty" />:
+        <M tex="Z=e^0+e^{-\beta\varepsilon}+e^{-2\beta\varepsilon}\xrightarrow{\beta\to0}1+1+1=3" />
+      </p>
+      <p>
+        <strong>שגוי:</strong> בכל T כללי <M tex="Z\neq3" />.
+        פונקציית החלוקה <em>תמיד</em> שוקלת לפי <M tex="e^{-\beta\varepsilon_i}" />.
+        Z=מספר מצבים רק בגבול <M tex="T\to\infty" />.
+      </p>
+      <p className="text-xs opacity-70">
+        ⚠️ מלכודת בחינה: "כמה מצבים יש?" ≠ "מה Z?"
+      </p>
+    </div>,
+    ['partition-function','Z-count-trap','T-infinity','degeneracy']),
+
+  q('prof-z2','4.1',4,'numeric',3,
+    <div className="space-y-1 text-sm" dir="rtl">
+      <p>
+        דיפול חשמלי עם ערכי אנרגיה <M tex="\varepsilon_n=-nPE,\;n=-2,-1,0,1,2" />.
+        (5 מצבים, שדה <M tex="E" />, דיפול <M tex="P" />)
+      </p>
+      <p className="font-semibold">
+        כתבו <M tex="Z_1" /> ופשטו תוך שימוש בזהות cosh.
+        מהו <M tex="Z_1" /> בגבול <M tex="T\to\infty" />?
+      </p>
+    </div>,
+    <div className="text-sm space-y-2" dir="rtl">
+      <BlockMath tex="Z_1=\sum_{n=-2}^{2}e^{n\beta PE}=1+2\cosh(\beta PE)+2\cosh(2\beta PE)" />
+      <p>
+        גבול <M tex="T\to\infty" /> (<M tex="\beta\to0" />):
+        <M tex="\cosh(x)\to1" /> לכן <M tex="Z_1\to1+2+2=5" /> — מספר המצבים.
+      </p>
+      <p className="text-xs opacity-70">
+        ⚠️ קל לבדוק: Z בגבול חם = מספר מצבים. תמיד בדקו!
+      </p>
+    </div>,
+    ['partition-function','dipole','cosh','T-infinity']),
+
+  // ── מלכודת N_factorial: N! רק לבלתי-מובחנים ───────────────────
+  q('prof-nfac1','4.2',4,'conceptual',2,
+    <div className="space-y-1 text-sm" dir="rtl">
+      <p>
+        שני מקרים: (א) N אוסילטורים הרמוניים על <strong>רשת קריסטלית</strong>.
+        (ב) N מולקולות גז חד-אטומי <strong>חופשיות בקופסה</strong>.
+      </p>
+      <p className="font-semibold">
+        באיזה מקרה כותבים <M tex="Z_N=Z_1^N/N!" /> ובאיזה <M tex="Z_N=Z_1^N" />? מדוע?
+      </p>
+    </div>,
+    <div className="text-sm space-y-2" dir="rtl">
+      <p>
+        <strong>(א) רשת — מובחנים:</strong> לכל אוסילטור יש מיקום קבוע על הרשת.
+        <M tex="Z_N=Z_1^N" /> (ללא N!)
+      </p>
+      <p>
+        <strong>(ב) גז — בלתי-מובחנים:</strong> מולקולות גז זהות אינן ניתנות לזיהוי.
+        <M tex="Z_N=Z_1^N/N!" /> (תיקון גיבס)
+      </p>
+      <p className="text-xs opacity-70">
+        ⚠️ כלל: N! רק כשהחלקיקים חופשיים לנוע ולהחליף מקומות (גז).
+        רשת, פולימר, ספינים קבועים — <strong>לעולם לא</strong> N!
+      </p>
+    </div>,
+    ['N-factorial','distinguishable','gibbs-paradox','crystal-vs-gas']),
+
+  q('prof-nfac2','4.2',4,'conceptual',3,
+    <div className="space-y-1 text-sm" dir="rtl">
+      <p>
+        גביש: N אוסילטורים עם מומנט מגנטי <M tex="\pm\mu_0" /> לכל אחד, שדה B.
+      </p>
+      <p className="font-semibold">
+        האם <M tex="Z_N=Z_1^N" /> או <M tex="Z_1^N/N!" />?
+        כיצד מחשבים <M tex="Z_1" /> כאשר לכל אוסילטור יש גם DOF תרמי וגם מגנטי?
+      </p>
+    </div>,
+    <div className="text-sm space-y-2" dir="rtl">
+      <p>
+        <strong>מובחנים</strong> (רשת) → <M tex="Z_N=Z_1^N" />, ללא N!.
+      </p>
+      <p>
+        שתי הדרגות <em>עצמאיות</em> (תרמי + מגנטי) →
+        <M tex="Z_1=Z_{\text{osc}}\cdot Z_{\text{mag}}" />
+      </p>
+      <BlockMath tex="Z_1=\frac{e^{-\beta\hbar\omega/2}}{1-e^{-\beta\hbar\omega}}\cdot 2\cosh(\beta\mu_0 B)" />
+      <p className="text-xs opacity-70">עצמאות DOF ↔ כפל פונקציות חלוקה</p>
+    </div>,
+    ['N-factorial','partition-function','crystal','magnetic','independence']),
+
+  // ── מלכודת mu_kinetic: μ ≠ אנרגיה קינטית ────────────────────────
+  q('prof-mu1','5.1',5,'conceptual',2,
+    <div className="space-y-1 text-sm" dir="rtl">
+      <p>
+        גז אידיאלי קלאסי בטמפ׳ T. סטודנט כותב:
+        "<M tex="\mu=\tfrac{3}{2}k_BT" /> — אנרגיה קינטית ממוצעת למולקולה".
+      </p>
+      <p className="font-semibold">מה הטעות? כיצד מחשבים μ נכון?</p>
+    </div>,
+    <div className="text-sm space-y-2" dir="rtl">
+      <p>
+        <strong>הטעות:</strong> μ כולל גם תרומת האנטרופיה, לא רק אנרגיה.
+      </p>
+      <p>
+        הגדרה נכונה: <M tex="\mu=\left(\frac{\partial F}{\partial N}\right)_{T,V}" />
+      </p>
+      <BlockMath tex="\mu=k_BT\ln\!\left(\frac{n}{n_Q}\right),\quad n_Q=\left(\frac{2\pi mk_BT}{h^2}\right)^{3/2}" />
+      <p>
+        שימו לב: <M tex="\mu\ll 0" /> עבור גז דליל (n≪n_Q).
+        ואם <M tex="\mu=\tfrac{3}{2}k_BT" /> — זה שגוי ממדית בחלק מהמקרים.
+      </p>
+      <p className="text-xs opacity-70">⚠️ μ תלוי גם בצפיפות n — לא רק ב-T!</p>
+    </div>,
+    ['chemical-potential','classical-limit','entropy-contribution','trap']),
+
+  q('prof-mu2','5.1',5,'conceptual',3,
+    <div className="space-y-1 text-sm" dir="rtl">
+      <p>
+        תגובה כימית: <M tex="3\text{O}_2\rightleftharpoons 2\text{O}_3" />.
+        כתבו את תנאי שיווי המשקל באמצעות פוטנציאלים כימיים.
+        מהי המשמעות הפיזיקלית?
+      </p>
+    </div>,
+    <div className="text-sm space-y-2" dir="rtl">
+      <p>
+        תנאי שיווי משקל: שינוי G = 0 תחת תגובה →
+      </p>
+      <BlockMath tex="3\mu(\text{O}_2)=2\mu(\text{O}_3)" />
+      <p>
+        עבור גז אידיאלי: <M tex="\mu_i=\mu_i^0(T)+k_BT\ln n_i" />
+      </p>
+      <BlockMath tex="\frac{n_{\text{O}_3}^2}{n_{\text{O}_2}^3}=\exp\!\left(\frac{3\mu_0(O_2)-2\mu_0(O_3)}{k_BT}\right)\equiv K(T)" />
+      <p className="text-xs opacity-70">
+        K(T) — קבוע שיווי משקל. תלוי ב-T בלבד, לא בצפיפויות!
+      </p>
+    </div>,
+    ['chemical-potential','chemical-equilibrium','grand-canonical','unit5']),
+
+  // ── שאלות גבול T→0 ────────────────────────────────────────────────
+  q('prof-t0-1','4.1',4,'conceptual',2,
+    <div className="space-y-1 text-sm" dir="rtl">
+      <p>
+        מערכת דו-מצבית: אנרגיות 0 ו-ε. מה <M tex="Z" />, <M tex="\langle E\rangle" />
+        ו-<M tex="C_V" /> בגבולות <M tex="T\to0" /> ו-<M tex="T\to\infty" />?
+      </p>
+    </div>,
+    <div className="text-sm space-y-2" dir="rtl">
+      <BlockMath tex="Z=1+e^{-\beta\varepsilon}" />
+      <p>
+        <strong><M tex="T\to0" />:</strong>{' '}
+        <M tex="Z\to1" />, <M tex="\langle E\rangle\to0" />, <M tex="C_V\to0" /> (רק המצב הבסיסי)
+      </p>
+      <p>
+        <strong><M tex="T\to\infty" />:</strong>{' '}
+        <M tex="Z\to2" />, <M tex="\langle E\rangle\to\varepsilon/2" />, <M tex="C_V\to0" /> (שיווי משקל)
+      </p>
+      <p>
+        פיק ב-<M tex="C_V" /> (Schottky) בין שני הגבולות, ב-<M tex="k_BT\approx\varepsilon/2" />.
+      </p>
+      <p className="text-xs opacity-70">⚠️ C_V→0 בשני הגבולות! הפיק אינו במקסימום Z.</p>
+    </div>,
+    ['two-level','schottky','T-to-zero','T-infinity','heat-capacity']),
+
+  q('prof-t0-2','4.5',4,'conceptual',3,
+    <div className="space-y-1 text-sm" dir="rtl">
+      <p>
+        גביש דביי: מדוע <M tex="C_V\propto T^3" /> בלבד עבור <M tex="T\ll\Theta_D" />,
+        ואיזה שגיאה עושים כשמשתמשים בזה לכל T?
+      </p>
+    </div>,
+    <div className="text-sm space-y-2" dir="rtl">
+      <BlockMath tex="C_V^{Debye}=9Nk_B\left(\frac{T}{\Theta_D}\right)^3\int_0^{\Theta_D/T}\!\frac{x^4e^x}{(e^x-1)^2}\,dx" />
+      <p>
+        בגבול <M tex="T\ll\Theta_D" />: גבול העליון → ∞, אינטגרל → קבוע (4π⁴/15) →
+        <M tex="C_V\propto T^3" />.
+      </p>
+      <p>
+        עבור <M tex="T\gg\Theta_D" />: <M tex="C_V\to3Nk_B" /> (דולונג-פטי), לא T³.
+      </p>
+      <p className="text-xs opacity-70">
+        ⚠️ T³ תקף רק ב-T≪Θ_D. כלל: הכנס ערכים ובדוק!
+      </p>
+    </div>,
+    ['debye','T-cubed','low-temperature','heat-capacity','Debye-limit']),
+
+  // ── אנומליה שוטקי (Schottky) ──────────────────────────────────────
+  q('prof-schottky1','4.1',4,'numeric',3,
+    <div className="space-y-1 text-sm" dir="rtl">
+      <p>
+        N אטומים עם שני מצבים: אנרגיות 0 ו-ε. הראו שמקסימום <M tex="C_V" />
+        (אנומליית שוטקי) מתרחש בערך בגובה <M tex="0.44Nk_B" />
+        בטמפרטורה <M tex="k_BT^*\approx 0.42\varepsilon" />.
+      </p>
+    </div>,
+    <div className="text-sm space-y-2" dir="rtl">
+      <BlockMath tex="C_V=Nk_B\left(\frac{\varepsilon}{k_BT}\right)^2\frac{e^{\varepsilon/k_BT}}{(1+e^{\varepsilon/k_BT})^2}" />
+      <p>
+        נגזור ונשווה לאפס. תוצאה נומרית (פתרון משוואה טרנסצנדנטית):
+      </p>
+      <p>
+        <M tex="x^*=\varepsilon/k_BT^*\approx 2.40" /> →
+        <M tex="k_BT^*\approx 0.42\varepsilon" />
+      </p>
+      <p>
+        גובה מקסימום: <M tex="C_V^{max}\approx0.44Nk_B" />
+      </p>
+      <p className="text-xs opacity-70">
+        המרצה אוהב לשאול: "מה קורה לאחר הפיק?" — C_V→0 מחדש.
+      </p>
+    </div>,
+    ['schottky','two-level','heat-capacity','maximum','numeric']),
+
+  // ── צפיפות מצבים: 3D מול 2D ──────────────────────────────────────
+  q('prof-dos1','5.2',5,'conceptual',3,
+    <div className="space-y-1 text-sm" dir="rtl">
+      <p>
+        גז אלקטרונים <strong>דו-ממדי</strong> (שטח A, לא נפח V).
+        מה צפיפות המצבים <M tex="g(\varepsilon)" /> ב-2D?
+        כיצד שונה אנרגיית פרמי מהמקרה התלת-ממדי?
+      </p>
+    </div>,
+    <div className="text-sm space-y-2" dir="rtl">
+      <p><strong>2D:</strong> ספירת מצבים בעיגול k-מרחב:</p>
+      <BlockMath tex="N=2\cdot\frac{A}{(2\pi)^2}\cdot\pi k_F^2\Rightarrow k_F=\sqrt{2\pi n_s}" />
+      <p>
+        צפיפות מצבים לשטח: <M tex="g_{2D}(\varepsilon)=\frac{m}{\pi\hbar^2}=\text{const}" />
+        (לא תלוי באנרגיה!)
+      </p>
+      <BlockMath tex="E_F^{2D}=\frac{\hbar^2 k_F^2}{2m}=\frac{\pi\hbar^2 n_s}{m}" />
+      <p>
+        <strong>הפרש מ-3D:</strong> ב-3D <M tex="g(\varepsilon)\propto\sqrt{\varepsilon}" />;
+        ב-2D g קבוע → תכונות שונות לחלוטין.
+      </p>
+      <p className="text-xs opacity-70">⚠️ רמת פרמי ב-2D: <M tex="\chi_{Pauli}" /> לא תלוי בצפיפות!</p>
+    </div>,
+    ['density-of-states','2D','fermi-energy','pauli-paramagnetism']),
+
+  q('prof-dos2','5.2',5,'conceptual',3,
+    <div className="space-y-1 text-sm" dir="rtl">
+      <p>
+        רגישות מגנטית (Pauli) של גז אלקטרונים ב-3D:
+        <M tex="\chi_{Pauli}\propto g(E_F)\propto n^{1/3}" />.
+        ב-2D: <M tex="g_{2D}=const" />.
+        מה ניבוי שונה עבור <M tex="\chi" /> ב-2D?
+      </p>
+    </div>,
+    <div className="text-sm space-y-2" dir="rtl">
+      <p>
+        <strong>3D:</strong> <M tex="\chi_{Pauli}\propto g(E_F)\propto E_F^{-1/2}\cdot n^{1/3}" />
+        — תלוי בצפיפות.
+      </p>
+      <p>
+        <strong>2D:</strong> <M tex="g_{2D}=m/(\pi\hbar^2)" /> קבוע →
+        <M tex="\chi_{Pauli}^{2D}\propto g_{2D}=\text{const}" />
+      </p>
+      <p>
+        מסקנה: ב-גז אלקטרונים 2D, הרגישות המגנטית <em>אינה תלויה</em> בצפיפות המשטח!
+        זה ניבוי ניסיוני שנבדק במבנים קוונטיים (GaAs heterostructures).
+      </p>
+      <p className="text-xs opacity-70">
+        שאלת "DOF extra twist" של המרצה: עשה 2D במקום 3D.
+      </p>
+    </div>,
+    ['pauli-paramagnetism','2D','density-of-states','susceptibility','fermi-gas']),
+
+  // ── שאלת "Extra DOF Twist" — תבנית מועדפת ────────────────────────
+  q('prof-dof1','4.4',4,'conceptual',3,
+    <div className="space-y-1 text-sm" dir="rtl">
+      <p>
+        גז H₂ (דו-אטומי). בתחום קלאסי: <M tex="C_V=(5/2)Nk_B" />.
+        הוסיפו: כל מולקולה גם ספין-½ (מומנט <M tex="\mu_0" />) בשדה B.
+      </p>
+      <p className="font-semibold">מה <M tex="C_V" /> הכולל? האם ה-DOF המגנטי תמיד פעיל?</p>
+    </div>,
+    <div className="text-sm space-y-2" dir="rtl">
+      <p>
+        שתי הדרגות עצמאיות → <M tex="Z_1=Z_{mech}\cdot Z_{spin}" />
+      </p>
+      <BlockMath tex="C_V=\underbrace{\frac{5}{2}Nk_B}_{\text{מכני}}+\underbrace{C_V^{spin}}_{\text{מגנטי}}" />
+      <p>
+        <M tex="C_V^{spin}=Nk_B\left(\frac{\mu_0 B}{k_BT}\right)^2\!\text{sech}^2\!\left(\frac{\mu_0 B}{k_BT}\right)" />
+      </p>
+      <p>
+        הפעלה: <M tex="k_BT\sim\mu_0 B" />.
+        ב-<M tex="T\gg\mu_0B/k_B" />: <M tex="C_V^{spin}\to0" /> (ה-DOF המגנטי "כבוי").
+      </p>
+      <p className="text-xs opacity-70">
+        ⚠️ תבנית המרצה: הוסף DOF → בדוק באיזה T הוא מתעורר.
+      </p>
+    </div>,
+    ['diatomic','magnetic-DOF','heat-capacity','activation','extra-dof']),
+
+  q('prof-dof2','4.3',4,'conceptual',3,
+    <div className="space-y-1 text-sm" dir="rtl">
+      <p>
+        גז חד-אטומי N אטומים בנפח V. כל אטום גם <strong>מצב אלקטרוני פנימי</strong>
+        בעל ניוון <M tex="g_e=3" /> ואנרגיה אפס (מצב בסיס).
+      </p>
+      <p className="font-semibold">
+        כיצד משפיע הניוון על F, S, <M tex="\mu" />?
+        האם הוא משפיע על <M tex="C_V" />?
+      </p>
+    </div>,
+    <div className="text-sm space-y-2" dir="rtl">
+      <p>
+        <M tex="Z_1=Z_{trans}\cdot Z_{elec}" />, כאשר <M tex="Z_{elec}=g_e=3" /> (לא תלוי ב-T!)
+      </p>
+      <BlockMath tex="F=-Nk_BT\ln Z_1=-Nk_BT(\ln Z_{trans}+\ln 3)" />
+      <p>
+        <M tex="\Delta F=-Nk_BT\ln 3" />,
+        <M tex="\Delta S=Nk_B\ln 3" /> (אנטרופיית תצורה)
+      </p>
+      <p>
+        <M tex="\Delta\mu=-k_BT\ln 3" /> (מוריד את הפוטנציאל הכימי)
+      </p>
+      <p>
+        <strong>C_V לא מושפע</strong>: <M tex="\ln 3" /> קבוע → נגזרת שנייה של F לפי T = 0.
+      </p>
+      <p className="text-xs opacity-70">
+        ⚠️ ניוון קבוע משנה S ו-μ אך לא C_V — שאלת מבחן קלאסית!
+      </p>
+    </div>,
+    ['degeneracy','free-energy','entropy','chemical-potential','Cv-unchanged']),
+
+  // ── גבול T→∞ על ספינים ───────────────────────────────────────────
+  q('prof-tinf1','2.5',2,'conceptual',2,
+    <div className="space-y-1 text-sm" dir="rtl">
+      <p>
+        N ספינים-½ פרה-מגנטיים, שדה B. הרגישות המגנטית (Curie):
+        <M tex="\chi=\frac{N\mu_0^2}{k_BT}" />.
+      </p>
+      <p className="font-semibold">
+        מה קורה ל-<M tex="\chi" /> כאשר <M tex="T\to0" /> ו-<M tex="T\to\infty" />?
+        מה האיום ב-<M tex="T=0" />?
+      </p>
+    </div>,
+    <div className="text-sm space-y-2" dir="rtl">
+      <p>
+        <M tex="T\to\infty" />: <M tex="\chi\to0" /> — מגנטיות נעלמת (חום מערבב ספינים)
+      </p>
+      <p>
+        <M tex="T\to0" />: <M tex="\chi\to\infty" /> (לפי קירוב קורי)
+      </p>
+      <p>
+        <strong>האיום:</strong> קירוב קורי שבור ב-T→0!
+        בפועל: ב-T נמוך <M tex="M\to N\mu_0" /> (רווייה מגנטית) — לא אינסוף.
+      </p>
+      <p className="text-xs opacity-70">
+        הנוסחה המדויקת עם Langevin/tanh נותנת רווייה; קורי תקף רק ב-<M tex="\mu_0B\ll k_BT" />.
+      </p>
+    </div>,
+    ['paramagnetism','curie-law','T-to-zero','saturation','limits']),
+]
+
+// ════════════════════════════════════════════════════════════════════
 // מאגר מלא
 // ════════════════════════════════════════════════════════════════════
 export const PRACTICE_BANK: PracticeQuestion[] = [
@@ -740,4 +1105,5 @@ export const PRACTICE_BANK: PracticeQuestion[] = [
   ...unit4,
   ...unit5,
   ...extra,
+  ...profStyle,
 ]
